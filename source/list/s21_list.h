@@ -29,6 +29,8 @@ class list {
   //   list(list&& other);
   //   list(std::initializer_list<T> init);
 
+  ~list();
+
   // Capacity
   bool empty() const noexcept;
   size_t size() const noexcept;
@@ -43,6 +45,27 @@ template <typename Type, typename Alloc>
 list<Type, Alloc>::list(const size_t count, const Type& value) {
   null_node_ = alloc_.allocate(1);
   alloc_.construct(null_node_, value);
+
+  Node<Type>* buffer_address = null_node_;
+  for (size_t counter = 0; counter < count; ++counter) {
+    Node<Type>* push = nullptr;
+    push = alloc_.allocate(1);
+    alloc_.construct(push, value);
+    buffer_address->next_node = push;
+    buffer_address = push;
+    ++stored_;
+  }
+}
+
+template <typename Type, typename Alloc>
+list<Type, Alloc>::~list() {
+  Node<Type>* buffer_address = null_node_;
+  while (buffer_address) {
+    Node<Type>* dealloc = buffer_address;
+    buffer_address = dealloc->next_node;
+    alloc_.destroy(dealloc);
+    alloc_.deallocate(dealloc, 1);
+  }
 }
 
 // Capacity
