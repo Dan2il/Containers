@@ -36,6 +36,12 @@ class list {
   bool empty() const noexcept;
   size_t size() const noexcept;
 
+  Type& front();
+  Type& front() const;
+
+  Type& back();
+  Type& back() const;
+
  private:
   Alloc alloc_;
   Node<Type>* null_node_ = nullptr;
@@ -109,6 +115,26 @@ bool s21::list<Type, Alloc>::empty() const noexcept {
 template <typename Type, typename Alloc>
 size_t s21::list<Type, Alloc>::size() const noexcept {
   return stored_;
+}
+
+template <typename Type, typename Alloc>
+Type& s21::list<Type, Alloc>::front() {
+  return null_node_->next_node->data;
+}
+
+template <typename Type, typename Alloc>
+Type& s21::list<Type, Alloc>::front() const {
+  return null_node_->next_node->data;
+}
+
+template <typename Type, typename Alloc>
+Type& s21::list<Type, Alloc>::back() {
+  return null_node_->previous_node->data;
+}
+
+template <typename Type, typename Alloc>
+Type& s21::list<Type, Alloc>::back() const {
+  return null_node_->previous_node->data;
 }
 
 template <typename Type, typename Alloc>
