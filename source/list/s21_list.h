@@ -12,7 +12,7 @@ struct Node {
   Node* previous_node;
   long int num_node;
 
-  Node() : next_node(nullptr), previous_node(nullptr) { num_node = -1; }
+  Node() : data(), next_node(nullptr), previous_node(nullptr) { num_node = -1; }
   Node(const Type& t) : Node() { data = t; };
 };
 
@@ -22,13 +22,9 @@ class list {
   explicit list() = default;
   list(const size_t count, const Type& value);
   explicit list(size_t count);
-
-  template <class InputIt>
-  list(InputIt first, InputIt last);
-
-  //   list(const list& other);
-  //   list(list&& other);
-  //   list(std::initializer_list<T> init);
+  list(std::initializer_list<Type> const& items);
+  list(const list& other);
+  list(list&& other) noexcept;
 
   ~list();
 
@@ -80,19 +76,44 @@ list<Type, Alloc>::list(size_t count) {
 }
 
 template <typename Type, typename Alloc>
-template <class InputIt>
-s21::list<Type, Alloc>::list(InputIt first, InputIt last)
-    : null_node_(alloc_.allocate(1)) {
-  // null_node_ = alloc_.allocate(1);
+s21::list<Type, Alloc>::list(std::initializer_list<Type> const& items) {
+  null_node_ = alloc_.allocate(1);
   Node<Type>* buffer_address = null_node_;
   alloc_.construct(null_node_);
-  for (; first != last; first++) {
+  for (auto it = items.begin(); it != items.end(); it++) {
     buffer_address->next_node = alloc_.allocate(1);
-    alloc_.construct(buffer_address->next_node, *first);
+    alloc_.construct(buffer_address->next_node, *it);
     LinkPointer(buffer_address, buffer_address->next_node);
     buffer_address = buffer_address->next_node;
     null_node_->previous_node = buffer_address;
+    ++stored_;
   }
+}
+
+template <typename Type, typename Alloc>
+s21::list<Type, Alloc>::list(const list& other)
+    : null_node_(alloc_.allocate(1)) {
+  alloc_.construct(null_node_);
+  Node<Type>* buffer_address = null_node_;
+  for (const Node<Type>* node = other.null_node_->next_node; node != nullptr;
+       node = node->next_node) {
+    buffer_address->next_node = alloc_.allocate(1);
+    alloc_.construct(buffer_address->next_node, node->data);
+    LinkPointer(buffer_address, buffer_address->next_node);
+    buffer_address = buffer_address->next_node;
+    null_node_->previous_node = buffer_address;
+    ++stored_;
+  }
+}
+
+template <typename Type, typename Alloc>
+s21::list<Type, Alloc>::list(list&& other) noexcept {
+  // null_node_ = other.null_node_;
+  // other.null_node_ = nullptr;
+
+  null_node_ = std::move(other.null_node_);
+  // alloc_ = std::move(other.alloc_);
+  // stored_ = std::move(other.stored_);
 }
 
 template <typename Type, typename Alloc>
