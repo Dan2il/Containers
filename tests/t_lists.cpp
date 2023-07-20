@@ -95,17 +95,17 @@ TEST(test_list, constructor_move) {
   s21::list<double> test_move(std::move(test));
   std::list<double> test_std_move(std::move(test_std));
 
-  // EXPECT_EQ(false, test_move.empty());
-  // EXPECT_EQ(test_std_move.empty(), test_move.empty());
+  EXPECT_EQ(false, test_move.empty());
+  EXPECT_EQ(test_std_move.empty(), test_move.empty());
 
-  // EXPECT_EQ(7, test_move.size());
-  // EXPECT_EQ(test_std_move.size(), test_move.size());
+  EXPECT_EQ(7, test_move.size());
+  EXPECT_EQ(test_std_move.size(), test_move.size());
 
-  // EXPECT_DOUBLE_EQ(1, test_move.front());
-  // EXPECT_DOUBLE_EQ(56.6542, test_move.back());
+  EXPECT_DOUBLE_EQ(1, test_move.front());
+  EXPECT_DOUBLE_EQ(56.6542, test_move.back());
 
-  // EXPECT_DOUBLE_EQ(test_std_move.front(), test_move.front());
-  // EXPECT_DOUBLE_EQ(test_std_move.back(), test_move.back());
+  EXPECT_DOUBLE_EQ(test_std_move.front(), test_move.front());
+  EXPECT_DOUBLE_EQ(test_std_move.back(), test_move.back());
 
   // добавить проверку циклом
 }
