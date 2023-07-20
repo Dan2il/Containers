@@ -38,6 +38,9 @@ class list {
   Type& back();
   Type& back() const;
 
+  // Modifiers
+  void clear();
+
  private:
   Alloc alloc_;
   Node<Type>* null_node_ = nullptr;
@@ -108,10 +111,11 @@ s21::list<Type, Alloc>::list(const list& other)
 
 template <typename Type, typename Alloc>
 s21::list<Type, Alloc>::list(list&& other) noexcept {
-  // null_node_ = other.null_node_;
-  // other.null_node_ = nullptr;
+  null_node_ = other.null_node_;
+  other.null_node_ = nullptr;
+  stored_ = std::move(other.stored_);
 
-  null_node_ = std::move(other.null_node_);
+  // null_node_ = std::move(other.null_node_);
   // alloc_ = std::move(other.alloc_);
   // stored_ = std::move(other.stored_);
 }
