@@ -19,6 +19,29 @@ struct Node {
 template <typename Type, typename Alloc = std::allocator<Node<Type>>>
 class list {
  public:
+  class ListIterator : public std::iterator<std::forward_iterator_tag, Type> {
+    // friend class s21::list<Type>;
+
+   public:
+    ListIterator();
+    ListIterator(const list<Type>* list, Node<Type>* node);
+
+    Type& operator*();
+
+    bool operator!=(const ListIterator& other_it);
+    bool operator==(const ListIterator& other_it);
+
+    ListIterator operator++();
+    // ListIterator<Type> operator++(int);
+
+    ListIterator operator--();
+    // ListIterator<Type> operator--(int);
+
+   private:
+    const list<Type>* link_list_;
+    Node<Type>* link_node_;
+  };
+
   explicit list() = default;
   list(const size_t count, const Type& value);
   explicit list(size_t count);
@@ -37,6 +60,11 @@ class list {
 
   Type& back();
   Type& back() const;
+
+  // Iterators
+
+  ListIterator begin();
+  // ListIterator end();
 
   // Modifiers
   void clear();
@@ -167,6 +195,53 @@ void s21::list<Type, Alloc>::LinkPointer(Node<Type>* for_link_next,
                                          Node<Type>* for_link_previous) {
   for_link_next->next_node = for_link_previous;
   for_link_previous->previous_node = for_link_next;
+}
+
+template <typename Type, typename Alloc>
+typename list<Type, Alloc>::ListIterator s21::list<Type, Alloc>::begin() {
+  return ListIterator(this, null_node_->next_node);
+}
+
+template <typename Type, typename Alloc>
+s21::list<Type, Alloc>::ListIterator::ListIterator()
+    : link_list_(nullptr), link_node_(nullptr) {}
+
+template <typename Type, typename Alloc>
+list<Type, Alloc>::ListIterator::ListIterator(const list<Type>* list,
+                                              Node<Type>* node)
+    : link_list_(list), link_node_(node) {}
+
+template <typename Type, typename Alloc>
+Type& list<Type, Alloc>::ListIterator::operator*() {
+  return link_node_->data;
+}
+
+template <typename Type, typename Alloc>
+bool list<Type, Alloc>::ListIterator::operator!=(const ListIterator& other_it) {
+  return !(*this == other_it);
+}
+
+template <typename Type, typename Alloc>
+bool list<Type, Alloc>::ListIterator::operator==(const ListIterator& other_it) {
+  return link_list_ == other_it.link_list_ && link_node_ == other_it.link_node_;
+}
+
+template <typename Type, typename Alloc>
+typename list<Type, Alloc>::ListIterator
+list<Type, Alloc>::ListIterator::operator++() {
+  if (link_node_ != nullptr) {
+    return {link_list_, link_node_->next_node};
+  }
+  return ListIterator();
+}
+
+template <typename Type, typename Alloc>
+typename list<Type, Alloc>::ListIterator
+list<Type, Alloc>::ListIterator::operator--() {
+  if (link_node_ != nullptr) {
+    return {link_list_, link_node_->previous_node};
+  }
+  return ListIterator();
 }
 
 }  // namespace s21
