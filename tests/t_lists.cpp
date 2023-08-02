@@ -145,13 +145,16 @@ TEST(test_list, iterators_begin) {
   EXPECT_DOUBLE_EQ(1, *(it_s21));
   EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-  // for (double it : test_std) {
-  //   std::cout << it << std::endl;
-  // }
+  for (double it : test) {
+    EXPECT_DOUBLE_EQ(it, *it_s21);
+    ++it_s21;
+  }
 
-  // for (double it : test) {
-  //   std::cout << it << std::endl;
-  // }
+  it_s21 = test.begin();
+  for (const double& it : test) {
+    EXPECT_DOUBLE_EQ(it, *it_s21);
+    ++it_s21;
+  }
 
   // добавить проверку циклом
 }
