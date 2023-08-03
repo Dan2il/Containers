@@ -166,8 +166,13 @@ size_t s21::list<Type, Alloc>::size() const noexcept {
 
 template <typename Type, typename Alloc>
 size_t s21::list<Type, Alloc>::max_size() const noexcept {
-  return alloc_.max_size();
-  // return std::numeric_limits<Type>::max();
+  if (std::numeric_limits<typename Alloc::size_type>::max() /
+          sizeof(Node<Type>) >
+      alloc_.max_size()) {
+    return alloc_.max_size();
+  }
+  return std::numeric_limits<typename Alloc::size_type>::max() /
+         sizeof(Node<Type>);
 }
 
 template <typename Type, typename Alloc>
