@@ -173,17 +173,62 @@ TEST(test_list, iterators) {
 }
 
 TEST(test_list, capacity) {
-  s21::list<double> test{1,      23, 53223, 543,   134234,      54,   56.6542,
-                         583459, 0,  245,   23523, 23535.45244, 9.999};
-  std::list<double> test_std{1,     23,          53223,  543, 134234,
-                             54,    56.6542,     583459, 0,   245,
-                             23523, 23535.45244, 9.999};
+  s21::list<double> test_d{1,      23, 53223, 543,   134234,      54,   56.6542,
+                           583459, 0,  245,   23523, 23535.45244, 9.999};
+  std::list<double> test_std_d{1,     23,          53223,  543, 134234,
+                               54,    56.6542,     583459, 0,   245,
+                               23523, 23535.45244, 9.999};
 
-  EXPECT_FALSE(test.empty());
-  EXPECT_EQ(test_std.empty(), test.empty());
+  EXPECT_FALSE(test_d.empty());
+  EXPECT_EQ(test_std_d.empty(), test_d.empty());
 
-  EXPECT_EQ(13, test.size());
-  EXPECT_EQ(test_std.size(), test.size());
+  EXPECT_EQ(13, test_d.size());
+  EXPECT_EQ(test_std_d.size(), test_d.size());
 
-  // EXPECT_EQ(test_std.max_size(), test.max_size());
+  EXPECT_EQ(test_std_d.max_size(), test_d.max_size());
+
+  s21::list<int> test_i{1,      23, 53223, 543,   134234, 54, 56,
+                        583459, 0,  245,   23523, 23535,  9};
+  std::list<int> test_std_i{1,      23, 53223, 543,   134234, 54, 56,
+                            583459, 0,  245,   23523, 23535,  9};
+
+  EXPECT_FALSE(test_i.empty());
+  EXPECT_EQ(test_std_i.empty(), test_i.empty());
+
+  EXPECT_EQ(13, test_i.size());
+  EXPECT_EQ(test_std_i.size(), test_i.size());
+
+  EXPECT_EQ(test_std_i.max_size(), test_i.max_size());
+
+  s21::list<unsigned long long int> test_ulli{
+      1, 23, 53223, 543, 134234, 54, 56, 583459, 0, 245, 23523, 23535, 9};
+  std::list<unsigned long long int> test_std_ulli{
+      1, 23, 53223, 543, 134234, 54, 56, 583459, 0, 245, 23523, 23535, 9};
+
+  EXPECT_FALSE(test_ulli.empty());
+  EXPECT_EQ(test_std_ulli.empty(), test_ulli.empty());
+
+  EXPECT_EQ(13, test_ulli.size());
+  EXPECT_EQ(test_std_ulli.size(), test_ulli.size());
+
+  EXPECT_EQ(test_std_ulli.max_size(), test_ulli.max_size());
+
+  struct Test {
+    int t1;
+    double t2;
+    size_t t3;
+  };
+
+  s21::list<Test> test_t{{1, 2.3, 5}, {1, 2.3, 5}, {1, 2.3, 5},
+                         {1, 2.3, 5}, {1, 2.3, 5}, {1, 2.3, 5}};
+  std::list<Test> test_std_t{{1, 2.3, 5}, {1, 2.3, 5}, {1, 2.3, 5},
+                             {1, 2.3, 5}, {1, 2.3, 5}, {1, 2.3, 5}};
+
+  EXPECT_FALSE(test_t.empty());
+  EXPECT_EQ(test_std_t.empty(), test_t.empty());
+
+  EXPECT_EQ(6, test_t.size());
+  EXPECT_EQ(test_std_t.size(), test_t.size());
+
+  EXPECT_EQ(test_std_t.max_size(), test_t.max_size());
 }
