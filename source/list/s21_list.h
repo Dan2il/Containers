@@ -7,12 +7,13 @@ namespace s21 {
 
 template <typename Type>
 struct Node {
-  Type data;
+  // Type data;
   Node* next_node;
   Node* previous_node;
-  long int num_node;
+  // long int num_node;
+  Type data;
 
-  Node() : data(), next_node(nullptr), previous_node(nullptr) { num_node = -1; }
+  Node() : next_node(nullptr), previous_node(nullptr), data() {}
   Node(const Type& t) : Node() { data = t; };
 };
 
@@ -73,6 +74,21 @@ class list {
 
   // Modifiers
   void clear();
+
+  // iterator insert(iterator pos, const Type& value);
+
+  // void push_front(const Type& value);
+  // void push_back(const Type& value);
+
+  // void pop_front();
+  // void pop_back();
+
+  // void swap(list& other);
+  // void merge(list& other);
+  // void splice(const_iterator pos, list& other);
+  // void reverse();
+  // void unique();
+  // void sort();
 
  private:
   Alloc alloc_;
