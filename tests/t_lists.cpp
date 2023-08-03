@@ -27,7 +27,9 @@ TEST(test_list, constuctor_count_value) {
 
   EXPECT_EQ(sizeof(test), sizeof(test_std));
 
-  // добавить проверку циклом
+  for (const int num : test) {
+    EXPECT_EQ(567, num);
+  }
 }
 
 TEST(test_list, constuctor_count) {
@@ -42,7 +44,9 @@ TEST(test_list, constuctor_count) {
 
   EXPECT_EQ(sizeof(test), sizeof(test_std));
 
-  // добавить проверку циклом
+  for (const int& n : test) {
+    EXPECT_EQ(0, n);
+  }
 }
 
 TEST(test_list, constructor_initializer_list) {
@@ -63,7 +67,11 @@ TEST(test_list, constructor_initializer_list) {
   EXPECT_DOUBLE_EQ(test_std.front(), test.front());
   EXPECT_DOUBLE_EQ(test_std.back(), test.back());
 
-  // добавить проверку циклом
+  std::list<double>::iterator it_std = test_std.begin();
+  for (double& n : test) {
+    EXPECT_DOUBLE_EQ(*it_std, n);
+    ++it_std;
+  }
 }
 
 TEST(test_list, constructor_copy) {
@@ -85,7 +93,11 @@ TEST(test_list, constructor_copy) {
   EXPECT_DOUBLE_EQ(test_std_copy.front(), test_copy.front());
   EXPECT_DOUBLE_EQ(test_std_copy.back(), test_copy.back());
 
-  // добавить проверку циклом
+  std::list<double>::iterator it_std = test_std.begin();
+  for (double& n : test) {
+    EXPECT_DOUBLE_EQ(*it_std, n);
+    ++it_std;
+  }
 }
 
 TEST(test_list, constructor_move) {
@@ -107,16 +119,19 @@ TEST(test_list, constructor_move) {
   EXPECT_DOUBLE_EQ(test_std_move.front(), test_move.front());
   EXPECT_DOUBLE_EQ(test_std_move.back(), test_move.back());
 
-  // добавить проверку циклом
+  std::list<double>::iterator it_std = test_std_move.begin();
+  for (double& n : test_move) {
+    EXPECT_DOUBLE_EQ(*it_std, n);
+    ++it_std;
+  }
 }
 
-TEST(test_list, iterators_begin) {
+TEST(test_list, iterators) {
   s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
   std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
 
   std::list<double>::iterator it_std = test_std.begin();
   s21::list<double>::iterator it_s21 = test.begin();
-
   EXPECT_DOUBLE_EQ(1, *it_std);
   EXPECT_DOUBLE_EQ(1, *it_s21);
   EXPECT_DOUBLE_EQ(*it_std, *it_s21);
@@ -155,6 +170,20 @@ TEST(test_list, iterators_begin) {
     EXPECT_DOUBLE_EQ(it, *it_s21);
     ++it_s21;
   }
+}
 
-  // добавить проверку циклом
+TEST(test_list, capacity) {
+  s21::list<double> test{1,      23, 53223, 543,   134234,      54,   56.6542,
+                         583459, 0,  245,   23523, 23535.45244, 9.999};
+  std::list<double> test_std{1,     23,          53223,  543, 134234,
+                             54,    56.6542,     583459, 0,   245,
+                             23523, 23535.45244, 9.999};
+
+  EXPECT_FALSE(test.empty());
+  EXPECT_EQ(test_std.empty(), test.empty());
+
+  EXPECT_EQ(13, test.size());
+  EXPECT_EQ(test_std.size(), test.size());
+
+  // EXPECT_EQ(test_std.max_size(), test.max_size());
 }
