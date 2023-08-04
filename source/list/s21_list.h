@@ -14,7 +14,7 @@ struct Node {
   Type data;
 
   Node() : next_node(nullptr), previous_node(nullptr), data() {}
-  Node(const Type& t) : Node() { data = t; };
+  explicit Node(const Type& t) : Node() { data = t; };
 };
 
 template <typename Type, typename Alloc = std::allocator<Node<Type>>>
@@ -47,7 +47,7 @@ class list {
   explicit list() = default;
   list(const size_t count, const Type& value);
   explicit list(size_t count);
-  list(std::initializer_list<Type> const& items);
+  explicit list(std::initializer_list<Type> const& items);
   list(const list<Type, Alloc>& other);
   list(list&& other) noexcept;
 
