@@ -299,3 +299,57 @@ TEST(test_list, clear) {
   double it = test_std.front();
   std::cout << it << std::endl;
 }
+
+TEST(test_list, pop_front) {
+  s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
+  std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
+
+  test.pop_front();
+  test_std.pop_front();
+
+  EXPECT_DOUBLE_EQ(23, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(6, test.size());
+
+  test.pop_front();
+  test_std.pop_front();
+
+  EXPECT_DOUBLE_EQ(53223, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(5, test.size());
+
+  test.pop_front();
+  test_std.pop_front();
+
+  EXPECT_DOUBLE_EQ(543, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(4, test.size());
+
+  test.pop_front();
+  test_std.pop_front();
+
+  EXPECT_DOUBLE_EQ(134234, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(3, test.size());
+
+  test.pop_front();
+  test_std.pop_front();
+
+  EXPECT_DOUBLE_EQ(54, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(2, test.size());
+
+  test.pop_front();
+  test_std.pop_front();
+
+  EXPECT_DOUBLE_EQ(56.6542, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(1, test.size());
+
+  test.pop_front();
+  test_std.pop_front();
+
+  EXPECT_DOUBLE_EQ(0, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(0, test.size());
+}
