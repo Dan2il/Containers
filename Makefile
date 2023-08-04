@@ -16,7 +16,7 @@ valgrind: test
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=_valgrind_res.txt ./build/s21_containers_tests
 
 leaks: test
-	leaks -atExit -- ./build/s21_matrix_tests
+	leaks -atExit -- ./build/s21_containers_tests
 
 style:
 	clang-format -n s21_matrix_oop/sources/*.*
