@@ -24,7 +24,8 @@ style:
 	clang-format -n tests/*.*
 
 cppcheck:
-	cppcheck --enable=all --suppress=missingIncludeSystem s21_matrix_oop/
+	cppcheck --enable=all --suppress=missingIncludeSystem --language=c++ --std=c++17 source/*
+	# cppcheck --enable=all --suppress=missingIncludeSystem source/list/*
 
 clean:
 	rm -rf build report *.o *.a *.html *.css _valgrind_res.txt
