@@ -59,10 +59,10 @@ class list {
   size_t max_size() const noexcept;
 
   Type& front();
-  Type& front() const;
+  const Type& front() const;
 
   Type& back();
-  Type& back() const;
+  const Type& back() const;
 
   // Iterators
 
@@ -75,13 +75,13 @@ class list {
   // Modifiers
   void clear();
 
-  // iterator insert(iterator pos, const Type& value);
+  iterator insert(iterator pos, const Type& value);
 
   // void push_front(const Type& value);
   // void push_back(const Type& value);
 
-  // void pop_front();
-  // void pop_back();
+  void pop_front();
+  void pop_back();
 
   // void swap(list& other);
   // void merge(list& other);
@@ -105,37 +105,43 @@ template <typename Type, typename Alloc>
 list<Type, Alloc>::list(const size_t count, const Type& value) {
   null_node_ = CreateNode();
   Node<Type>* buffer_address = null_node_;
-  for (; stored_ < count;
-       ++stored_, buffer_address = buffer_address->next_node) {
+  for (; stored_ < count; ++stored_) {
     buffer_address->next_node = CreateNode(value);
-    LinkPointer(buffer_address, buffer_address->next_node);
+    buffer_address->next_node->previous_node = buffer_address;
+    buffer_address = buffer_address->next_node;
   }
-  null_node_->previous_node = buffer_address;
+  buffer_address->next_node = CreateNode();
+  buffer_address->next_node->previous_node = buffer_address;
+  null_node_->previous_node = buffer_address->next_node;
 }
 
 template <typename Type, typename Alloc>
 list<Type, Alloc>::list(size_t count) {
   null_node_ = CreateNode();
   Node<Type>* buffer_address = null_node_;
-  for (; stored_ < count;
-       ++stored_, buffer_address = buffer_address->next_node) {
+  for (; stored_ < count; ++stored_) {
     buffer_address->next_node = CreateNode();
-    LinkPointer(buffer_address, buffer_address->next_node);
+    buffer_address->next_node->previous_node = buffer_address;
+    buffer_address = buffer_address->next_node;
   }
-  null_node_->previous_node = buffer_address;
+  buffer_address->next_node = CreateNode();
+  buffer_address->next_node->previous_node = buffer_address;
+  null_node_->previous_node = buffer_address->next_node;
 }
 
 template <typename Type, typename Alloc>
 s21::list<Type, Alloc>::list(std::initializer_list<Type> const& items) {
   null_node_ = CreateNode();
   Node<Type>* buffer_address = null_node_;
-  for (auto it = items.begin(); it != items.end();
-       it++, buffer_address = buffer_address->next_node) {
+  for (auto it = items.begin(); it != items.end(); it++) {
     buffer_address->next_node = CreateNode(*it);
-    LinkPointer(buffer_address, buffer_address->next_node);
+    buffer_address->next_node->previous_node = buffer_address;
+    buffer_address = buffer_address->next_node;
     ++stored_;
   }
-  null_node_->previous_node = buffer_address;
+  buffer_address->next_node = CreateNode();
+  buffer_address->next_node->previous_node = buffer_address;
+  null_node_->previous_node = buffer_address->next_node;
 }
 
 template <typename Type, typename Alloc>
@@ -143,9 +149,10 @@ s21::list<Type, Alloc>::list(const list<Type, Alloc>& other) {
   null_node_ = CreateNode();
   Node<Type>* buffer_address = null_node_;
   for (const Node<Type>* node = other.null_node_->next_node; node != nullptr;
-       node = node->next_node, buffer_address = buffer_address->next_node) {
+       node = node->next_node) {
     buffer_address->next_node = CreateNode(node->data);
-    LinkPointer(buffer_address, buffer_address->next_node);
+    buffer_address->next_node->previous_node = buffer_address;
+    buffer_address = buffer_address->next_node;
   }
   stored_ = other.stored_;
   null_node_->previous_node = buffer_address;
@@ -197,18 +204,41 @@ Type& s21::list<Type, Alloc>::front() {
 }
 
 template <typename Type, typename Alloc>
-Type& s21::list<Type, Alloc>::front() const {
+const Type& s21::list<Type, Alloc>::front() const {
   return null_node_->next_node->data;
 }
 
 template <typename Type, typename Alloc>
 Type& s21::list<Type, Alloc>::back() {
-  return null_node_->previous_node->data;
+  return null_node_->previous_node->previous_node->data;
 }
 
 template <typename Type, typename Alloc>
-Type& s21::list<Type, Alloc>::back() const {
-  return null_node_->previous_node->data;
+const Type& s21::list<Type, Alloc>::back() const {
+  return null_node_->previous_node->previous_node->data;
+}
+
+// Modifiers
+
+template <typename Type, typename Alloc>
+void s21::list<Type, Alloc>::clear() {
+  // Node<Type>* buffer_address = null_node_;
+  // while (buffer_address) {
+  //   Node<Type>* dealloc = buffer_address;
+  //   buffer_address = dealloc->next_node;
+  //   alloc_.destroy(dealloc);
+  //   alloc_.deallocate(dealloc, 1);
+  // }
+}
+
+template <typename Type, typename Alloc>
+void s21::list<Type, Alloc>::pop_front() {
+  // cle
+}
+
+template <typename Type, typename Alloc>
+void s21::list<Type, Alloc>::pop_back() {
+  //
 }
 
 template <typename Type, typename Alloc>
@@ -232,6 +262,8 @@ void s21::list<Type, Alloc>::LinkPointer(Node<Type>* for_link_next,
   for_link_previous->previous_node = for_link_next;
 }
 
+// Iterators
+
 template <typename Type, typename Alloc>
 typename list<Type, Alloc>::iterator s21::list<Type, Alloc>::begin() {
   return iterator(this, null_node_->next_node);
@@ -252,8 +284,6 @@ template <typename Type, typename Alloc>
 typename list<Type, Alloc>::const_iterator s21::list<Type, Alloc>::end() const {
   return const_iterator(this, null_node_->previous_node);
 }
-
-// Iterators
 
 template <typename Type, typename Alloc>
 s21::list<Type, Alloc>::iterator::list_iterator()
