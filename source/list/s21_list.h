@@ -200,21 +200,33 @@ size_t s21::list<Type, Alloc>::max_size() const noexcept {
 
 template <typename Type, typename Alloc>
 Type& s21::list<Type, Alloc>::front() {
+  if (!null_node_->next_node) {
+    return null_node_->data;
+  }
   return null_node_->next_node->data;
 }
 
 template <typename Type, typename Alloc>
 const Type& s21::list<Type, Alloc>::front() const {
+  if (!null_node_->next_node) {
+    return null_node_->data;
+  }
   return null_node_->next_node->data;
 }
 
 template <typename Type, typename Alloc>
 Type& s21::list<Type, Alloc>::back() {
+  if (!null_node_->previous_node || !null_node_->previous_node->previous_node) {
+    return null_node_->data;
+  }
   return null_node_->previous_node->previous_node->data;
 }
 
 template <typename Type, typename Alloc>
 const Type& s21::list<Type, Alloc>::back() const {
+  if (!null_node_->previous_node || !null_node_->previous_node->previous_node) {
+    return null_node_->data;
+  }
   return null_node_->previous_node->previous_node->data;
 }
 
@@ -233,7 +245,17 @@ void s21::list<Type, Alloc>::clear() {
 
 template <typename Type, typename Alloc>
 void s21::list<Type, Alloc>::pop_front() {
-  // cle
+  if (null_node_->next_node != null_node_->previous_node) {
+    Node<Type>* del_node = null_node_->next_node;
+
+    null_node_->next_node = del_node->next_node;
+    null_node_->next_node->previous_node = null_node_;
+
+    alloc_.destroy(del_node);
+    alloc_.deallocate(del_node, 1);
+
+    --stored_;
+  }
 }
 
 template <typename Type, typename Alloc>
