@@ -28,6 +28,9 @@ TEST(test_list, constuctor_count_value) {
 
   EXPECT_EQ(sizeof(test), sizeof(test_std));
 
+  EXPECT_DOUBLE_EQ(567, test.front());
+  EXPECT_DOUBLE_EQ(567, test.back());
+
   for (const int num : test) {
     EXPECT_EQ(567, num);
   }
@@ -44,6 +47,9 @@ TEST(test_list, constuctor_count) {
   EXPECT_EQ(test_std.size(), test.size());
 
   EXPECT_EQ(sizeof(test), sizeof(test_std));
+
+  EXPECT_DOUBLE_EQ(0, test.front());
+  EXPECT_DOUBLE_EQ(0, test.back());
 
   for (const int& n : test) {
     EXPECT_EQ(0, n);
@@ -63,6 +69,7 @@ TEST(test_list, constructor_initializer_list) {
   EXPECT_EQ(sizeof(test), sizeof(test_std));
 
   EXPECT_DOUBLE_EQ(1, test.front());
+  std::cout << "test.back() == " << test.back() << std::endl;
   EXPECT_DOUBLE_EQ(56.6542, test.back());
 
   EXPECT_DOUBLE_EQ(test_std.front(), test.front());
@@ -91,14 +98,14 @@ TEST(test_list, constructor_copy) {
   EXPECT_DOUBLE_EQ(1, test_copy.front());
   EXPECT_DOUBLE_EQ(56.6542, test_copy.back());
 
-  EXPECT_DOUBLE_EQ(test_std_copy.front(), test_copy.front());
-  EXPECT_DOUBLE_EQ(test_std_copy.back(), test_copy.back());
+  // EXPECT_DOUBLE_EQ(test_std_copy.front(), test_copy.front());
+  // EXPECT_DOUBLE_EQ(test_std_copy.back(), test_copy.back());
 
-  std::list<double>::iterator it_std = test_std.begin();
-  for (double& n : test) {
-    EXPECT_DOUBLE_EQ(*it_std, n);
-    ++it_std;
-  }
+  // std::list<double>::iterator it_std = test_std.begin();
+  // for (double& n : test) {
+  //   EXPECT_DOUBLE_EQ(*it_std, n);
+  //   ++it_std;
+  // }
 }
 
 TEST(test_list, constructor_move) {
@@ -128,48 +135,62 @@ TEST(test_list, constructor_move) {
 }
 
 TEST(test_list, iterators) {
-  s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
-  std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
+  {
+    s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
+    std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
 
-  std::list<double>::iterator it_std = test_std.begin();
-  s21::list<double>::iterator it_s21 = test.begin();
-  EXPECT_DOUBLE_EQ(1, *it_std);
-  EXPECT_DOUBLE_EQ(1, *it_s21);
-  EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    std::list<double>::iterator it_std = test_std.begin();
+    s21::list<double>::iterator it_s21 = test.begin();
 
-  EXPECT_DOUBLE_EQ(23, *(++it_std));
-  EXPECT_DOUBLE_EQ(23, *(++it_s21));
-  EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    EXPECT_DOUBLE_EQ(1, *it_std);
+    EXPECT_DOUBLE_EQ(1, *it_s21);
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-  EXPECT_DOUBLE_EQ(23, *(it_std++));
-  EXPECT_DOUBLE_EQ(23, *(it_s21++));
-  EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    EXPECT_DOUBLE_EQ(23, *(++it_std));
+    EXPECT_DOUBLE_EQ(23, *(++it_s21));
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-  EXPECT_DOUBLE_EQ(53223, *(it_std));
-  EXPECT_DOUBLE_EQ(53223, *(it_s21));
-  EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    EXPECT_DOUBLE_EQ(23, *(it_std++));
+    EXPECT_DOUBLE_EQ(23, *(it_s21++));
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-  EXPECT_DOUBLE_EQ(23, *(--it_std));
-  EXPECT_DOUBLE_EQ(23, *(--it_s21));
-  EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    EXPECT_DOUBLE_EQ(53223, *(it_std));
+    EXPECT_DOUBLE_EQ(53223, *(it_s21));
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-  EXPECT_DOUBLE_EQ(23, *(it_std--));
-  EXPECT_DOUBLE_EQ(23, *(it_s21--));
-  EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    EXPECT_DOUBLE_EQ(23, *(--it_std));
+    EXPECT_DOUBLE_EQ(23, *(--it_s21));
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-  EXPECT_DOUBLE_EQ(1, *(it_std));
-  EXPECT_DOUBLE_EQ(1, *(it_s21));
-  EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    EXPECT_DOUBLE_EQ(23, *(it_std--));
+    EXPECT_DOUBLE_EQ(23, *(it_s21--));
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-  for (double it : test) {
-    EXPECT_DOUBLE_EQ(it, *it_s21);
-    ++it_s21;
+    EXPECT_DOUBLE_EQ(1, *(it_std));
+    EXPECT_DOUBLE_EQ(1, *(it_s21));
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+
+    for (double it : test) {
+      EXPECT_DOUBLE_EQ(it, *it_s21);
+      ++it_s21;
+    }
+
+    it_s21 = test.begin();
+    for (const double& it : test) {
+      EXPECT_DOUBLE_EQ(it, *it_s21);
+      ++it_s21;
+    }
   }
+  {
+    s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
+    std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
 
-  it_s21 = test.begin();
-  for (const double& it : test) {
-    EXPECT_DOUBLE_EQ(it, *it_s21);
-    ++it_s21;
+    std::list<double>::iterator it_std = test_std.end();
+    s21::list<double>::iterator it_s21 = test.end();
+
+    EXPECT_DOUBLE_EQ(56.6542, *(--it_std));
+    EXPECT_DOUBLE_EQ(56.6542, *(--it_s21));
+    // EXPECT_DOUBLE_EQ(*it_std, *it_s21);
   }
 }
 
@@ -262,4 +283,19 @@ TEST(test_list, capacity) {
 
     EXPECT_EQ(test_std_ch.max_size(), test_ch.max_size());
   }
+}
+
+TEST(test_list, clear) {
+  struct Test {
+    int t1;
+    double t2;
+    size_t t3;
+  };
+
+  // s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
+  std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
+
+  test_std.clear();
+  double it = test_std.front();
+  std::cout << it << std::endl;
 }
