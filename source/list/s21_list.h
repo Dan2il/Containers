@@ -98,6 +98,8 @@ class list {
   Node<Type>* CreateNode();
   Node<Type>* CreateNode(const Type& data);
 
+  void FreeNode(Node<Type>* node);
+
   void LinkPointer(Node<Type>* for_link_next, Node<Type>* for_link_previous);
 };
 
@@ -167,12 +169,19 @@ s21::list<Type, Alloc>::list(list&& other) noexcept {
 
 template <typename Type, typename Alloc>
 list<Type, Alloc>::~list() {
-  Node<Type>* buffer_address = null_node_;
-  while (buffer_address) {
-    Node<Type>* dealloc = buffer_address;
-    buffer_address = dealloc->next_node;
-    alloc_.destroy(dealloc);
-    alloc_.deallocate(dealloc, 1);
+  // Node<Type>* buffer_address = null_node_;
+  if (null_node_) {
+    for (Node<Type>* node = null_node_; node != nullptr;) {
+      Node<Type>* dealloc = node;
+      node = node->next_node;
+      FreeNode(dealloc);
+    }
+
+    // while (buffer_address) {
+    //   Node<Type>* dealloc = buffer_address;
+    //   buffer_address = dealloc->next_node;
+    //   FreeNode(dealloc);
+    // }
   }
 }
 
@@ -234,13 +243,10 @@ const Type& s21::list<Type, Alloc>::back() const {
 
 template <typename Type, typename Alloc>
 void s21::list<Type, Alloc>::clear() {
-  // Node<Type>* buffer_address = null_node_;
-  // while (buffer_address) {
-  //   Node<Type>* dealloc = buffer_address;
-  //   buffer_address = dealloc->next_node;
-  //   alloc_.destroy(dealloc);
-  //   alloc_.deallocate(dealloc, 1);
-  // }
+  if (stored_ > 1) {
+    clear();
+  }
+  pop_front();
 }
 
 template <typename Type, typename Alloc>
@@ -251,17 +257,37 @@ void s21::list<Type, Alloc>::pop_front() {
     null_node_->next_node = del_node->next_node;
     null_node_->next_node->previous_node = null_node_;
 
-    alloc_.destroy(del_node);
-    alloc_.deallocate(del_node, 1);
+    FreeNode(del_node);
 
     --stored_;
   }
 }
 
+// мысль: сделать реверс и использовать pop_front
+//
 template <typename Type, typename Alloc>
 void s21::list<Type, Alloc>::pop_back() {
-  //
+  if (null_node_->next_node != null_node_->previous_node) {
+    // if (stored_ == 1) {
+    //   pop_front();
+    // } else {
+    Node<Type>* del_node = null_node_->previous_node->previous_node;
+
+    null_node_->previous_node->previous_node = del_node->previous_node;
+    null_node_->previous_node->previous_node->previous_node->next_node =
+        del_node->next_node;
+
+    // std::cout << "FreeNode(del_node);" << std::endl;
+    FreeNode(del_node);
+
+    // std::cout << "FreeNode(del_node) end;" << std::endl;
+    --stored_;
+    // }
+  }
+  // std::cout << "pop_back end;" << std::endl;
 }
+
+// null | 0 | del | end
 
 template <typename Type, typename Alloc>
 Node<Type>* s21::list<Type, Alloc>::CreateNode() {
@@ -275,6 +301,16 @@ Node<Type>* s21::list<Type, Alloc>::CreateNode(const Type& data) {
   Node<Type>* for_create = alloc_.allocate(1);
   alloc_.construct(for_create, data);
   return for_create;
+}
+
+template <typename Type, typename Alloc>
+void s21::list<Type, Alloc>::FreeNode(Node<Type>* node) {
+  assert(node != nullptr);
+  if (!node) {
+    throw std::invalid_argument("destroy nullptr node");
+  }
+  alloc_.destroy(node);
+  alloc_.deallocate(node, 1);
 }
 
 template <typename Type, typename Alloc>
