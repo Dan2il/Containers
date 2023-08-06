@@ -1,4 +1,5 @@
 #include <list>
+#include <stack>
 #include <string>
 
 #include "test.h"
@@ -303,6 +304,23 @@ TEST(test_list, clear) {
   EXPECT_EQ(*test_std.end(), *test.end());
 }
 
+TEST(test_list, insert) {
+  s21::list<size_t> test;
+  std::list<size_t> test_std;
+
+  EXPECT_EQ(0, test.size());
+  EXPECT_TRUE(test.empty());
+  EXPECT_EQ(test_std.empty(), test.empty());
+
+  test.insert(test.begin(), 25);
+  test_std.insert(test_std.begin(), 25);
+
+  // EXPECT_DOUBLE_EQ(25, test_std.front());
+  // EXPECT_DOUBLE_EQ(25, test.front());
+  // EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  // EXPECT_EQ(0, test.size());
+}
+
 TEST(test_list, pop_front) {
   s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
   std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
@@ -437,4 +455,6 @@ TEST(test_list, pop_back) {
   EXPECT_DOUBLE_EQ(0, test.back());
   EXPECT_DOUBLE_EQ(test_std.back(), test.back());
   EXPECT_EQ(0, test.size());
+
+  // test_std.insert();
 }
