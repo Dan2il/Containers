@@ -21,6 +21,8 @@ template <typename Type, typename Alloc = std::allocator<Node<Type>>>
 class list {
  public:
   class list_iterator : public std::iterator<std::forward_iterator_tag, Type> {
+    friend class list;
+
    public:
     list_iterator();
     list_iterator(const list<Type>* list, Node<Type>* node);
@@ -44,7 +46,7 @@ class list {
   typedef list_iterator iterator;
   typedef const list_iterator const_iterator;
 
-  explicit list() = default;
+  list();
   list(const size_t count, const Type& value);
   explicit list(size_t count);
   explicit list(std::initializer_list<Type> const& items);
@@ -102,6 +104,9 @@ class list {
 
   void LinkPointer(Node<Type>* for_link_next, Node<Type>* for_link_previous);
 };
+
+template <typename Type, typename Alloc>
+list<Type, Alloc>::list() : null_node_(CreateNode()) {}
 
 template <typename Type, typename Alloc>
 list<Type, Alloc>::list(const size_t count, const Type& value) {
@@ -245,6 +250,26 @@ void s21::list<Type, Alloc>::clear() {
 }
 
 template <typename Type, typename Alloc>
+typename s21::list<Type, Alloc>::iterator s21::list<Type, Alloc>::insert(
+    iterator pos, const Type& value) {
+  assert(pos.link_node_ != nullptr);
+  assert(pos.link_list_ != nullptr);
+
+  Node<Type>* new_node = CreateNode(value);
+  Node<Type>* pos_node = pos.link_node_;
+
+  if (pos_node) {
+  }
+
+  new_node->next_node = pos_node->next_node;
+  new_node->previous_node = pos_node;
+
+  //   new_node->next_node->previous_node = new_node;
+  // new_node->previous_node->next_node = new_node;
+  return iterator(this, new_node);
+}
+
+template <typename Type, typename Alloc>
 void s21::list<Type, Alloc>::pop_front() {
   if (null_node_->next_node != null_node_->previous_node) {
     Node<Type>* del_node = null_node_->next_node;
@@ -307,12 +332,18 @@ void s21::list<Type, Alloc>::LinkPointer(Node<Type>* for_link_next,
 
 template <typename Type, typename Alloc>
 typename list<Type, Alloc>::iterator s21::list<Type, Alloc>::begin() {
+  if (!stored_) {
+    return iterator(this, null_node_);
+  }
   return iterator(this, null_node_->next_node);
 }
 
 template <typename Type, typename Alloc>
 typename list<Type, Alloc>::const_iterator s21::list<Type, Alloc>::begin()
     const {
+  if (!stored_) {
+    return iterator(this, null_node_);
+  }
   return const_iterator(this, null_node_->next_node);
 }
 
