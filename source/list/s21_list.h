@@ -77,8 +77,8 @@ class list {
 
   iterator insert(iterator pos, const Type& value);
 
-  // void push_front(const Type& value);
-  // void push_back(const Type& value);
+  void push_front(const Type& value);
+  void push_back(const Type& value);
 
   void pop_front();
   void pop_back();
