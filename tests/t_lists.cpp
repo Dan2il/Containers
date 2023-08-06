@@ -286,18 +286,21 @@ TEST(test_list, capacity) {
 }
 
 TEST(test_list, clear) {
-  struct Test {
-    int t1;
-    double t2;
-    size_t t3;
-  };
-
-  // s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
+  s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
   std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
 
+  test.clear();
   test_std.clear();
-  double it = test_std.front();
-  std::cout << it << std::endl;
+
+  EXPECT_EQ(0, test.size());
+  EXPECT_TRUE(test.empty());
+  EXPECT_EQ(test_std.empty(), test.empty());
+
+  EXPECT_EQ(test_std.front(), test.front());
+  EXPECT_EQ(test_std.back(), test.back());
+
+  EXPECT_EQ(*test_std.begin(), *test.begin());
+  EXPECT_EQ(*test_std.end(), *test.end());
 }
 
 TEST(test_list, pop_front) {
@@ -385,54 +388,53 @@ TEST(test_list, pop_back) {
   EXPECT_DOUBLE_EQ(test_std.back(), test.back());
   EXPECT_EQ(5, test.size());
 
-  // test.pop_back();
-  // test_std.pop_back();
+  test.pop_back();
+  test_std.pop_back();
 
-  // EXPECT_DOUBLE_EQ(1, test.front());
-  // EXPECT_DOUBLE_EQ(543, test.back());
-  // EXPECT_DOUBLE_EQ(test_std.back(), test.back());
-  // EXPECT_EQ(4, test.size());
+  EXPECT_DOUBLE_EQ(1, test.front());
+  EXPECT_DOUBLE_EQ(543, test.back());
+  EXPECT_DOUBLE_EQ(test_std.back(), test.back());
+  EXPECT_EQ(4, test.size());
 
-  // it_std = test_std.begin();
-  // for (double& n : test) {
-  //   EXPECT_DOUBLE_EQ(*it_std, n);
-  //   ++it_std;
-  // }
+  it_std = test_std.begin();
+  for (double& n : test) {
+    EXPECT_DOUBLE_EQ(*it_std, n);
+    ++it_std;
+  }
 
-  // test.pop_back();
-  // test_std.pop_back();
+  test.pop_back();
+  test_std.pop_back();
 
-  // EXPECT_DOUBLE_EQ(1, test.front());
-  // EXPECT_DOUBLE_EQ(53223, test.back());
-  // EXPECT_DOUBLE_EQ(test_std.back(), test.back());
-  // EXPECT_EQ(3, test.size());
+  EXPECT_DOUBLE_EQ(1, test.front());
+  EXPECT_DOUBLE_EQ(53223, test.back());
+  EXPECT_DOUBLE_EQ(test_std.back(), test.back());
+  EXPECT_EQ(3, test.size());
 
-  // test.pop_back();
-  // test_std.pop_back();
+  test.pop_back();
+  test_std.pop_back();
 
-  // EXPECT_DOUBLE_EQ(1, test.front());
-  // EXPECT_DOUBLE_EQ(23, test.back());
-  // EXPECT_DOUBLE_EQ(test_std.back(), test.back());
-  // EXPECT_EQ(2, test.size());
+  EXPECT_DOUBLE_EQ(1, test.front());
+  EXPECT_DOUBLE_EQ(23, test.back());
+  EXPECT_DOUBLE_EQ(test_std.back(), test.back());
+  EXPECT_EQ(2, test.size());
 
-  // it_std = test_std.begin();
-  // for (double& n : test) {
-  //   EXPECT_DOUBLE_EQ(*it_std, n);
-  //   ++it_std;
-  // }
+  it_std = test_std.begin();
+  for (double& n : test) {
+    EXPECT_DOUBLE_EQ(*it_std, n);
+    ++it_std;
+  }
 
-  // std::cout << "test.pop_back();" << std::endl;
-  // test.pop_back();
-  // test_std.pop_back();
+  test.pop_back();
+  test_std.pop_back();
 
-  // EXPECT_DOUBLE_EQ(1, test.back());
-  // EXPECT_DOUBLE_EQ(test_std.back(), test.back());
-  // EXPECT_EQ(1, test.size());
-  // std::cout << "test.pop_back(); end" << std::endl;
-  // test.pop_back();
-  // test_std.pop_back();
+  EXPECT_DOUBLE_EQ(1, test.back());
+  EXPECT_DOUBLE_EQ(test_std.back(), test.back());
+  EXPECT_EQ(1, test.size());
 
-  // EXPECT_DOUBLE_EQ(0, test.back());
-  // EXPECT_DOUBLE_EQ(test_std.back(), test.back());
-  // EXPECT_EQ(0, test.size());
+  test.pop_back();
+  test_std.pop_back();
+
+  EXPECT_DOUBLE_EQ(0, test.back());
+  EXPECT_DOUBLE_EQ(test_std.back(), test.back());
+  EXPECT_EQ(0, test.size());
 }
