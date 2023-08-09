@@ -455,6 +455,4 @@ TEST(test_list, pop_back) {
   EXPECT_DOUBLE_EQ(0, test.back());
   EXPECT_DOUBLE_EQ(test_std.back(), test.back());
   EXPECT_EQ(0, test.size());
-
-  // test_std.insert();
 }
