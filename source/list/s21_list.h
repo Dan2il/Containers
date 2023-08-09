@@ -273,6 +273,7 @@ typename s21::list<Type, Alloc>::iterator s21::list<Type, Alloc>::insert(
   pos_node->next_node = new_node;
   next_pos_node->previous_node = new_node;
 
+  ++stored_;
   return iterator(this, new_node);
 }
 

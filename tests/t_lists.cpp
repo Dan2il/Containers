@@ -312,13 +312,25 @@ TEST(test_list, insert) {
   EXPECT_TRUE(test.empty());
   EXPECT_EQ(test_std.empty(), test.empty());
 
-  test.insert(test.begin(), 25);
-  test_std.insert(test_std.begin(), 25);
+  s21::list<size_t>::iterator it_s21 = test.insert(test.begin(), 25);
+  std::list<size_t>::iterator it_std = test_std.insert(test_std.begin(), 25);
 
-  // EXPECT_DOUBLE_EQ(25, test_std.front());
-  // EXPECT_DOUBLE_EQ(25, test.front());
-  // EXPECT_DOUBLE_EQ(test_std.front(), test.front());
-  // EXPECT_EQ(0, test.size());
+  EXPECT_DOUBLE_EQ(25, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(1, test.size());
+
+  EXPECT_DOUBLE_EQ(25, *it_s21);
+  EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+
+  s21::list<size_t>::iterator it_s21_2 = test.insert(it_s21, 234234);
+  std::list<size_t>::iterator it_std_2 = test_std.insert(it_std, 234234);
+
+  EXPECT_DOUBLE_EQ(234234, *(++test.begin()));
+  EXPECT_DOUBLE_EQ(*(++test_std.begin()), *(++test.begin()));
+  EXPECT_EQ(2, test.size());
+
+  EXPECT_DOUBLE_EQ(234234, *it_s21_2);
+  EXPECT_DOUBLE_EQ(*it_s21_2, *it_std_2);
 }
 
 TEST(test_list, pop_front) {
