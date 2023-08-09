@@ -106,7 +106,15 @@ class list {
 };
 
 template <typename Type, typename Alloc>
-list<Type, Alloc>::list() : null_node_(CreateNode()) {}
+list<Type, Alloc>::list() : null_node_(CreateNode()) {
+  Node<Type>* end_node = CreateNode();
+
+  null_node_->next_node = end_node;
+  null_node_->previous_node = end_node;
+
+  end_node->next_node = null_node_;
+  end_node->previous_node = null_node_;
+}
 
 template <typename Type, typename Alloc>
 list<Type, Alloc>::list(const size_t count, const Type& value) {
@@ -182,6 +190,9 @@ list<Type, Alloc>::~list() {
       node = node->next_node;
       FreeNode(dealloc);
     }
+    if (end_node) {
+      FreeNode(end_node);
+    }
   }
 }
 
@@ -252,20 +263,16 @@ void s21::list<Type, Alloc>::clear() {
 template <typename Type, typename Alloc>
 typename s21::list<Type, Alloc>::iterator s21::list<Type, Alloc>::insert(
     iterator pos, const Type& value) {
-  assert(pos.link_node_ != nullptr);
-  assert(pos.link_list_ != nullptr);
-
   Node<Type>* new_node = CreateNode(value);
   Node<Type>* pos_node = pos.link_node_;
+  Node<Type>* next_pos_node = pos_node->next_node;
 
-  if (pos_node) {
-  }
-
-  new_node->next_node = pos_node->next_node;
+  new_node->next_node = next_pos_node;
   new_node->previous_node = pos_node;
 
-  //   new_node->next_node->previous_node = new_node;
-  // new_node->previous_node->next_node = new_node;
+  pos_node->next_node = new_node;
+  next_pos_node->previous_node = new_node;
+
   return iterator(this, new_node);
 }
 
@@ -284,7 +291,6 @@ void s21::list<Type, Alloc>::pop_front() {
 }
 
 // мысль: сделать реверс и использовать pop_front
-//
 template <typename Type, typename Alloc>
 void s21::list<Type, Alloc>::pop_back() {
   if (null_node_->next_node != null_node_->previous_node) {
