@@ -13,12 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-#     - name: make
-#       run: make
-#     - name: make check
-#       run: make check
-#     - name: make distcheck
-#       run: make distcheck
+    - name: Setup working dir
+      working-directory: ./source/queue
     - name: style
       run: make style
     - name: cppcheck
