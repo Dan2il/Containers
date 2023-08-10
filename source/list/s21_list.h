@@ -137,9 +137,9 @@ s21::list<Type, Alloc>::list(const list<Type, Alloc>& other) : list() {
 
 template <typename Type, typename Alloc>
 s21::list<Type, Alloc>::list(list&& other) noexcept {
-  end_node_ = other.null_node_;
-  other.null_node_ = nullptr;
-  stored_ = std::move(other.stored_);
+  end_node_ = std::exchange(other.end_node_, nullptr);
+  stored_ = std::exchange(other.stored_, 0);
+  alloc_ = std::exchange(other.alloc_, std::allocator<Node<Type>>());
 }
 
 template <typename Type, typename Alloc>
