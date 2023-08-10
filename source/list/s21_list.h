@@ -123,16 +123,9 @@ list<Type, Alloc>::list(const size_t count, const Type& value) : list() {
 template <typename Type, typename Alloc>
 s21::list<Type, Alloc>::list(std::initializer_list<Type> const& items)
     : list() {
-  Node<Type>* buffer_address = end_node_;
-  for (auto it = items.begin(); it != items.end(); it++) {
-    buffer_address->next_node = CreateNode(*it);
-    buffer_address->next_node->previous_node = buffer_address;
-    buffer_address = buffer_address->next_node;
-    ++stored_;
+  for (const Type& it : items) {
+    push_back(it);
   }
-  buffer_address->next_node = CreateNode();
-  buffer_address->next_node->previous_node = buffer_address;
-  end_node_->previous_node = buffer_address->next_node;
 }
 
 template <typename Type, typename Alloc>
