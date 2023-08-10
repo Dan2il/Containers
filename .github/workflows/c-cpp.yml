@@ -14,8 +14,6 @@ jobs:
       - name: install -y cppcheck
         run: sudo apt install cppcheck
       - name: style
-        working-directory: ./source
         run: make style
       - name: cppcheck
-        working-directory: ./source
         run: make cppcheck
