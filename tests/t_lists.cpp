@@ -17,44 +17,80 @@ TEST(test_list, default_constuctor) {
 }
 
 TEST(test_list, constuctor_count) {
-  s21::list<int> test(11);
-  std::list<int> test_std(11);
+  {
+    s21::list<int> test(11);
+    std::list<int> test_std(11);
 
-  EXPECT_EQ(false, test.empty());
-  EXPECT_EQ(test_std.empty(), test.empty());
+    EXPECT_FALSE(test.empty());
+    EXPECT_EQ(test_std.empty(), test.empty());
 
-  EXPECT_EQ(11, test.size());
-  EXPECT_EQ(test_std.size(), test.size());
+    EXPECT_EQ(11, test.size());
+    EXPECT_EQ(test_std.size(), test.size());
 
-  EXPECT_EQ(sizeof(test), sizeof(test_std));
+    EXPECT_EQ(sizeof(test), sizeof(test_std));
 
-  EXPECT_DOUBLE_EQ(0, test.front());
-  EXPECT_DOUBLE_EQ(0, test.back());
+    EXPECT_DOUBLE_EQ(0, test.front());
+    EXPECT_DOUBLE_EQ(0, test.back());
 
-  for (const int& n : test) {
-    EXPECT_EQ(0, n);
+    for (const int& n : test) {
+      EXPECT_EQ(0, n);
+    }
+  }
+  {
+    s21::list<int> test(0);
+    std::list<int> test_std(0);
+
+    EXPECT_TRUE(test.empty());
+    EXPECT_EQ(test_std.empty(), test.empty());
+
+    EXPECT_EQ(0, test.size());
+    EXPECT_EQ(test_std.size(), test.size());
+
+    EXPECT_EQ(sizeof(test), sizeof(test_std));
+
+    EXPECT_DOUBLE_EQ(0, test.front());
+    EXPECT_DOUBLE_EQ(0, test.back());
   }
 }
 
-// TEST(test_list, constuctor_count_value) {
-//   s21::list<int> test(11, 567);
-//   std::list<int> test_std(11, 567);
+TEST(test_list, constuctor_count_value) {
+  {
+    s21::list<int> test(11, 567);
+    std::list<int> test_std(11, 567);
 
-//   EXPECT_EQ(false, test.empty());
-//   EXPECT_EQ(test_std.empty(), test.empty());
+    EXPECT_FALSE(test.empty());
+    EXPECT_EQ(test_std.empty(), test.empty());
 
-// EXPECT_EQ(11, test.size());
-// EXPECT_EQ(test_std.size(), test.size());
+    EXPECT_EQ(11, test.size());
+    EXPECT_EQ(test_std.size(), test.size());
 
-// EXPECT_EQ(sizeof(test), sizeof(test_std));
+    EXPECT_EQ(sizeof(test), sizeof(test_std));
 
-// EXPECT_DOUBLE_EQ(567, test.front());
-// EXPECT_DOUBLE_EQ(567, test.back());
+    EXPECT_DOUBLE_EQ(567, test.front());
+    EXPECT_DOUBLE_EQ(567, test.back());
 
-// for (const int num : test) {
-//   EXPECT_EQ(567, num);
-// }
-// }
+    for (const int num : test) {
+      EXPECT_EQ(567, num);
+    }
+  }
+  {
+    s21::list<int> test(0, 567);
+    std::list<int> test_std(0, 567);
+
+    EXPECT_TRUE(test.empty());
+    EXPECT_EQ(test_std.empty(), test.empty());
+
+    EXPECT_EQ(0, test.size());
+    EXPECT_EQ(test_std.size(), test.size());
+
+    EXPECT_EQ(sizeof(test), sizeof(test_std));
+
+    EXPECT_DOUBLE_EQ(0, test.front());
+    EXPECT_DOUBLE_EQ(0, test.back());
+    EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+    EXPECT_DOUBLE_EQ(test_std.back(), test.back());
+  }
+}
 
 // TEST(test_list, constuctor_count) {
 //   s21::list<int> test(11);
