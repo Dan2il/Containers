@@ -7,7 +7,6 @@ namespace s21 {
 
 template <typename Type>
 struct Node {
-  // Type data;
   Node* next_node;
   Node* previous_node;
   Type data;
