@@ -1,7 +1,7 @@
 
 #include <iostream>  // УДАЛИТЬ
-#include <limits>
-#include <memory>
+
+#include "../s21_containers.h"
 
 namespace s21 {
 
