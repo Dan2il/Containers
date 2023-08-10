@@ -1,6 +1,4 @@
 #include <list>
-#include <map>
-#include <stack>
 #include <string>
 
 #include "test.h"
@@ -45,17 +43,17 @@ TEST(test_list, constuctor_count) {
 //   EXPECT_EQ(false, test.empty());
 //   EXPECT_EQ(test_std.empty(), test.empty());
 
-//   EXPECT_EQ(11, test.size());
-//   EXPECT_EQ(test_std.size(), test.size());
+// EXPECT_EQ(11, test.size());
+// EXPECT_EQ(test_std.size(), test.size());
 
-//   EXPECT_EQ(sizeof(test), sizeof(test_std));
+// EXPECT_EQ(sizeof(test), sizeof(test_std));
 
-//   EXPECT_DOUBLE_EQ(567, test.front());
-//   EXPECT_DOUBLE_EQ(567, test.back());
+// EXPECT_DOUBLE_EQ(567, test.front());
+// EXPECT_DOUBLE_EQ(567, test.back());
 
-//   for (const int num : test) {
-//     EXPECT_EQ(567, num);
-//   }
+// for (const int num : test) {
+//   EXPECT_EQ(567, num);
+// }
 // }
 
 // TEST(test_list, constuctor_count) {
@@ -353,6 +351,25 @@ TEST(test_list, constuctor_count) {
 //   EXPECT_DOUBLE_EQ(234234, *it_s21_2);
 //   EXPECT_DOUBLE_EQ(*it_s21_2, *it_std_2);
 // }
+
+TEST(test_list, push_back) {
+  s21::list<double> test;
+  std::list<double> test_std;
+
+  EXPECT_EQ(0, test.size());
+  EXPECT_TRUE(test.empty());
+  EXPECT_EQ(test_std.empty(), test.empty());
+
+  test.push_back(25);
+  test_std.push_back(25);
+
+  EXPECT_EQ(1, test.size());
+  EXPECT_FALSE(test.empty());
+  EXPECT_EQ(test_std.empty(), test.empty());
+
+  EXPECT_DOUBLE_EQ(25, test.front());
+  EXPECT_DOUBLE_EQ(25, test.back());
+}
 
 // TEST(test_list, pop_front) {
 //   s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};

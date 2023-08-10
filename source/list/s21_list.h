@@ -1,7 +1,7 @@
 
 #include <iostream>  // УДАЛИТЬ
 
-#include "../s21_containers.h"
+// #include "../s21_containers.h"
 
 namespace s21 {
 
@@ -111,26 +111,23 @@ template <typename Type, typename Alloc>
 list<Type, Alloc>::list(size_t count) : list() {
   Node<Type>* buffer_address = end_node_;
   for (; stored_ < count; ++stored_) {
-    buffer_address->next_node = CreateNode();
-    buffer_address->next_node->previous_node = buffer_address;
+    Node<Type>* push = CreateNode();
+    buffer_address->next_node = push;
+    push->previous_node = buffer_address;
     buffer_address = buffer_address->next_node;
   }
-  // buffer_address->next_node = CreateNode();
-  // buffer_address->next_node->previous_node = buffer_address;
-  // end_node_->previous_node = buffer_address->next_node;
 }
 
 template <typename Type, typename Alloc>
 list<Type, Alloc>::list(const size_t count, const Type& value) : list() {
-  Node<Type>* buffer_address = end_node_;
-  for (; stored_ < count; ++stored_) {
-    buffer_address->next_node = CreateNode(value);
-    buffer_address->next_node->previous_node = buffer_address;
-    buffer_address = buffer_address->next_node;
+  // Node<Type>* buffer_address = end_node_;
+  for (; stored_ < count;) {
+    push_back(value);
+    // Node<Type>* push = CreateNode(value);
+    // buffer_address->next_node = push;
+    // push->previous_node = buffer_address;
+    // buffer_address = buffer_address->next_node;
   }
-  buffer_address->next_node = CreateNode();
-  buffer_address->next_node->previous_node = buffer_address;
-  end_node_->previous_node = buffer_address->next_node;
 }
 
 template <typename Type, typename Alloc>
@@ -224,6 +221,7 @@ const Type& s21::list<Type, Alloc>::front() const {
 
 template <typename Type, typename Alloc>
 Type& s21::list<Type, Alloc>::back() {
+  // assert(end_node_->previous_node != nullptr);
   if (!end_node_->previous_node) {
     return end_node_->data;
   }
@@ -265,10 +263,28 @@ typename s21::list<Type, Alloc>::iterator s21::list<Type, Alloc>::insert(
   return iterator(this, new_node);
 }
 
-// template <typename Type, typename Alloc>
-// void s21::list<Type, Alloc>::push_back(const Type& value) {
-//   //
-// }
+template <typename Type, typename Alloc>
+void s21::list<Type, Alloc>::push_back(const Type& value) {
+  assert(end_node_ != nullptr);
+  Node<Type>* push = CreateNode(value);
+  assert(push != nullptr);
+  if (!stored_) {
+    end_node_->previous_node = push;
+    end_node_->next_node = push;
+
+    // push->next_node = end_node_;
+    // push->previous_node = end_node_;
+  } else {
+    // Node<Type>* prev_end = end_node_->previous_node;
+
+    // prev_end->next_node = push;
+    // push->next_node = end_node_;
+
+    // end_node_->previous_node = push;
+    // push->previous_node = prev_end;
+  }
+  ++stored_;
+}
 
 template <typename Type, typename Alloc>
 void s21::list<Type, Alloc>::pop_front() {
