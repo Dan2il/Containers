@@ -108,24 +108,15 @@ list<Type, Alloc>::list() : end_node_(CreateNode()) {}
 
 template <typename Type, typename Alloc>
 list<Type, Alloc>::list(size_t count) : list() {
-  Node<Type>* buffer_address = end_node_;
-  for (; stored_ < count; ++stored_) {
-    Node<Type>* push = CreateNode();
-    buffer_address->next_node = push;
-    push->previous_node = buffer_address;
-    buffer_address = buffer_address->next_node;
+  for (; stored_ < count;) {
+    push_back(Type());
   }
 }
 
 template <typename Type, typename Alloc>
 list<Type, Alloc>::list(const size_t count, const Type& value) : list() {
-  // Node<Type>* buffer_address = end_node_;
   for (; stored_ < count;) {
     push_back(value);
-    // Node<Type>* push = CreateNode(value);
-    // buffer_address->next_node = push;
-    // push->previous_node = buffer_address;
-    // buffer_address = buffer_address->next_node;
   }
 }
 
@@ -266,9 +257,7 @@ typename s21::list<Type, Alloc>::iterator s21::list<Type, Alloc>::insert(
 
 template <typename Type, typename Alloc>
 void s21::list<Type, Alloc>::push_back(const Type& value) {
-  assert(end_node_ != nullptr);
   Node<Type>* push = CreateNode(value);
-  assert(push != nullptr);
   if (!stored_) {
     end_node_->previous_node = push;
     end_node_->next_node = push;
