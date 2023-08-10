@@ -10,7 +10,6 @@ struct Node {
   // Type data;
   Node* next_node;
   Node* previous_node;
-  // long int num_node;
   Type data;
 
   Node() : next_node(nullptr), previous_node(nullptr), data() {}
