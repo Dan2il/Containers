@@ -143,31 +143,52 @@ TEST(test_list, constructor_initializer_list) {
   }
 }
 
-// TEST(test_list, constructor_copy) {
-//   s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
-//   std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
+TEST(test_list, constructor_copy) {
+  {
+    s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
+    std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
 
-//   s21::list<double> test_copy(test);
-//   std::list<double> test_std_copy(test_std);
+    s21::list<double> test_copy(test);
+    std::list<double> test_std_copy(test_std);
 
-//   EXPECT_EQ(false, test_copy.empty());
-//   EXPECT_EQ(test_std_copy.empty(), test_copy.empty());
+    EXPECT_FALSE(test_copy.empty());
+    EXPECT_EQ(test_std_copy.empty(), test_copy.empty());
 
-//   EXPECT_EQ(7, test_copy.size());
-//   EXPECT_EQ(test_std_copy.size(), test_copy.size());
+    EXPECT_EQ(7, test_copy.size());
+    EXPECT_EQ(test_std_copy.size(), test_copy.size());
 
-//   EXPECT_DOUBLE_EQ(1, test_copy.front());
-//   EXPECT_DOUBLE_EQ(56.6542, test_copy.back());
+    EXPECT_DOUBLE_EQ(1, test_copy.front());
+    EXPECT_DOUBLE_EQ(56.6542, test_copy.back());
 
-//   // EXPECT_DOUBLE_EQ(test_std_copy.front(), test_copy.front());
-//   // EXPECT_DOUBLE_EQ(test_std_copy.back(), test_copy.back());
+    EXPECT_DOUBLE_EQ(test_std_copy.front(), test_copy.front());
+    EXPECT_DOUBLE_EQ(test_std_copy.back(), test_copy.back());
 
-//   // std::list<double>::iterator it_std = test_std.begin();
-//   // for (double& n : test) {
-//   //   EXPECT_DOUBLE_EQ(*it_std, n);
-//   //   ++it_std;
-//   // }
-// }
+    std::list<double>::iterator it_std = test_std.begin();
+    for (double& n : test) {
+      EXPECT_DOUBLE_EQ(*it_std, n);
+      ++it_std;
+    }
+  }
+  {
+    s21::list<double> test{};
+    std::list<double> test_std{};
+
+    s21::list<double> test_copy(test);
+    std::list<double> test_std_copy(test_std);
+
+    EXPECT_TRUE(test_copy.empty());
+    EXPECT_EQ(test_std_copy.empty(), test_copy.empty());
+
+    EXPECT_EQ(0, test_copy.size());
+    EXPECT_EQ(test_std_copy.size(), test_copy.size());
+
+    EXPECT_DOUBLE_EQ(0, test_copy.front());
+    EXPECT_DOUBLE_EQ(0, test_copy.back());
+
+    EXPECT_DOUBLE_EQ(test_std_copy.front(), test_copy.front());
+    EXPECT_DOUBLE_EQ(test_std_copy.back(), test_copy.back());
+  }
+}
 
 // TEST(test_list, constructor_move) {
 //   s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
