@@ -168,8 +168,9 @@ template <typename Type, typename Alloc>
 list<Type, Alloc>::~list() {
   // Node<Type>* buffer_address = null_node_;
   if (end_node_) {
-    Node<Type>* end = end_node_->previous_node;
-    for (Node<Type>* node = end_node_; node != nullptr;) {
+    Node<Type>* end = end_node_;
+    for (Node<Type>* node = end_node_->next_node;
+         node != nullptr && node != end;) {
       Node<Type>* dealloc = node;
       node = node->next_node;
       FreeNode(dealloc);
@@ -178,6 +179,8 @@ list<Type, Alloc>::~list() {
       FreeNode(end);
     }
   }
+  stored_ = 0;
+  end_node_ = nullptr;
 }
 
 // Capacity
@@ -271,16 +274,16 @@ void s21::list<Type, Alloc>::push_back(const Type& value) {
     end_node_->previous_node = push;
     end_node_->next_node = push;
 
-    // push->next_node = end_node_;
-    // push->previous_node = end_node_;
+    push->next_node = end_node_;
+    push->previous_node = end_node_;
   } else {
-    // Node<Type>* prev_end = end_node_->previous_node;
+    Node<Type>* prev_end = end_node_->previous_node;
 
-    // prev_end->next_node = push;
-    // push->next_node = end_node_;
+    prev_end->next_node = push;
+    push->next_node = end_node_;
 
-    // end_node_->previous_node = push;
-    // push->previous_node = prev_end;
+    end_node_->previous_node = push;
+    push->previous_node = prev_end;
   }
   ++stored_;
 }
