@@ -369,6 +369,15 @@ TEST(test_list, push_back) {
 
   EXPECT_DOUBLE_EQ(25, test.front());
   EXPECT_DOUBLE_EQ(25, test.back());
+
+  test.push_back(25.255);
+  test_std.push_back(25.255);
+
+  EXPECT_EQ(2, test.size());
+  EXPECT_DOUBLE_EQ(25, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_DOUBLE_EQ(25.255, test.back());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
 }
 
 // TEST(test_list, pop_front) {
