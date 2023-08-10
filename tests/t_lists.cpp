@@ -377,7 +377,34 @@ TEST(test_list, push_back) {
   EXPECT_DOUBLE_EQ(25, test.front());
   EXPECT_DOUBLE_EQ(test_std.front(), test.front());
   EXPECT_DOUBLE_EQ(25.255, test.back());
+  EXPECT_DOUBLE_EQ(test_std.back(), test.back());
+
+  test.push_back(0.009);
+  test_std.push_back(0.009);
+
+  EXPECT_EQ(3, test.size());
+  EXPECT_DOUBLE_EQ(25, test.front());
   EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_DOUBLE_EQ(0.009, test.back());
+  EXPECT_DOUBLE_EQ(test_std.back(), test.back());
+
+  test.push_back(234687342);
+  test_std.push_back(234687342);
+
+  EXPECT_EQ(4, test.size());
+  EXPECT_DOUBLE_EQ(25, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_DOUBLE_EQ(234687342, test.back());
+  EXPECT_DOUBLE_EQ(test_std.back(), test.back());
+
+  test.push_back(976986679867986);
+  test_std.push_back(976986679867986);
+
+  EXPECT_EQ(5, test.size());
+  EXPECT_DOUBLE_EQ(25, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_DOUBLE_EQ(976986679867986, test.back());
+  EXPECT_DOUBLE_EQ(test_std.back(), test.back());
 }
 
 // TEST(test_list, pop_front) {
