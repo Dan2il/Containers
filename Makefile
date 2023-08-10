@@ -1,5 +1,3 @@
-
-
 test: gtest_install
 	cmake -S . -B build
 	cmake --build build
@@ -19,12 +17,10 @@ leaks: test
 	leaks -atExit -- ./build/s21_containers_tests
 
 style:
-	clang-format -n s21_matrix_oop/sources/*.*
-	clang-format -n s21_matrix_oop/*.*
-	clang-format -n tests/*.*
+	clang-format -n ./source/*/*.cc source/*/*.h source/*.h
 
 cppcheck:
-	cppcheck --enable=all --suppress=missingIncludeSystem --language=c++ --std=c++17 source/*
+	cppcheck --enable=all --suppress=missingIncludeSystem --language=c++ --std=c++17 ./source/*/*.cc ./source/*/*.h ./source/*.h 
 	# cppcheck --enable=all --suppress=missingIncludeSystem source/list/*
 
 clean:
