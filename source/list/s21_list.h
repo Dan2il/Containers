@@ -166,7 +166,6 @@ s21::list<Type, Alloc>::list(list&& other) noexcept {
 
 template <typename Type, typename Alloc>
 list<Type, Alloc>::~list() {
-  // Node<Type>* buffer_address = null_node_;
   if (end_node_) {
     Node<Type>* end = end_node_;
     for (Node<Type>* node = end_node_->next_node;
