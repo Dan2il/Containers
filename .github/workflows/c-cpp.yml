@@ -8,14 +8,12 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Setup working dir
-      working-directory: ./source/queue
-    - name: style
-      run: make style
-    - name: cppcheck
-      run: make cppcheck
+      steps:
+      - uses: actions/checkout@v3
+      - name: Setup working dir
+        working-directory: ./source/queue
+      - name: style
+        run: make style
+      - name: cppcheck
+        run: make cppcheck
