@@ -218,7 +218,7 @@ const Type& s21::list<Type, Alloc>::back() const {
 
 template <typename Type, typename Alloc>
 void s21::list<Type, Alloc>::clear() {
-  if (stored_) {
+  if (stored_ && end_node_) {
     pop_front();
     clear();
   }
