@@ -218,10 +218,10 @@ const Type& s21::list<Type, Alloc>::back() const {
 
 template <typename Type, typename Alloc>
 void s21::list<Type, Alloc>::clear() {
-  if (stored_ > 0) {
-    pop_front();
-    clear();
-  }
+  // if (stored_ > 0) {
+  //   pop_front();
+  //   clear();
+  // }
 }
 
 template <typename Type, typename Alloc>
@@ -264,14 +264,20 @@ void s21::list<Type, Alloc>::push_back(const Type& value) {
 
 template <typename Type, typename Alloc>
 void s21::list<Type, Alloc>::pop_front() {
-  if (end_node_->next_node != end_node_->previous_node) {
-    Node<Type>* del_node = end_node_->next_node;
+  if (end_node_ && stored_) {
+    if (stored_ > 1) {
+      Node<Type>* del_node = end_node_->next_node;
+      Node<Type>* buf_next_node = del_node->next_node;
 
-    end_node_->next_node = del_node->next_node;
-    end_node_->next_node->previous_node = end_node_;
+      end_node_->next_node = buf_next_node;
+      buf_next_node->previous_node = end_node_;
 
-    FreeNode(del_node);
-
+      FreeNode(del_node);
+    } else {
+      FreeNode(end_node_->next_node);
+      end_node_->next_node = nullptr;
+      end_node_->previous_node = nullptr;
+    }
     --stored_;
   }
 }
