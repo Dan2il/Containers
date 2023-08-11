@@ -200,7 +200,6 @@ const Type& s21::list<Type, Alloc>::front() const {
 
 template <typename Type, typename Alloc>
 Type& s21::list<Type, Alloc>::back() {
-  // assert(end_node_->previous_node != nullptr);
   if (!end_node_->previous_node) {
     return end_node_->data;
   }
@@ -277,7 +276,6 @@ void s21::list<Type, Alloc>::pop_front() {
   }
 }
 
-// мысль: сделать реверс и использовать pop_front
 template <typename Type, typename Alloc>
 void s21::list<Type, Alloc>::pop_back() {
   if (end_node_->next_node != end_node_->previous_node) {

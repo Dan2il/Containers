@@ -261,78 +261,70 @@ TEST(test_list, constructor_move) {
     EXPECT_FALSE(test_move_2.empty());
     EXPECT_EQ(test_std_move_2.empty(), test_move_2.empty());
 
-    // EXPECT_EQ(0, test_move.size());
-    // EXPECT_EQ(test_std_move.size(), test_move.size());
-
-    // EXPECT_DOUBLE_EQ(0, test_move_2.front());
-    // EXPECT_DOUBLE_EQ(0, test_std_move_2.front());
-
-    // EXPECT_DOUBLE_EQ(0, test_move.back());
-
-    // EXPECT_DOUBLE_EQ(test_std_move.front(), test_move.front());
-    // EXPECT_DOUBLE_EQ(test_std_move.back(), test_move.back());
+    EXPECT_EQ(0, test_move.size());
+    EXPECT_EQ(test_std_move.size(), test_move.size());
   }
 }
 
-// TEST(test_list, iterators) {
-//   {
-//     s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
-//     std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
+TEST(test_list, iterators) {
+  {
+    s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
+    std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
 
-//     std::list<double>::iterator it_std = test_std.begin();
-//     s21::list<double>::iterator it_s21 = test.begin();
+    std::list<double>::iterator it_std = test_std.begin();
+    s21::list<double>::iterator it_s21 = test.begin();
 
-//     EXPECT_DOUBLE_EQ(1, *it_std);
-//     EXPECT_DOUBLE_EQ(1, *it_s21);
-//     EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    EXPECT_DOUBLE_EQ(1, *it_std);
+    EXPECT_DOUBLE_EQ(1, *it_s21);
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-//     EXPECT_DOUBLE_EQ(23, *(++it_std));
-//     EXPECT_DOUBLE_EQ(23, *(++it_s21));
-//     EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    EXPECT_DOUBLE_EQ(23, *(++it_std));
+    EXPECT_DOUBLE_EQ(23, *(++it_s21));
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-//     EXPECT_DOUBLE_EQ(23, *(it_std++));
-//     EXPECT_DOUBLE_EQ(23, *(it_s21++));
-//     EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    EXPECT_DOUBLE_EQ(23, *(it_std++));
+    EXPECT_DOUBLE_EQ(23, *(it_s21++));
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-//     EXPECT_DOUBLE_EQ(53223, *(it_std));
-//     EXPECT_DOUBLE_EQ(53223, *(it_s21));
-//     EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    EXPECT_DOUBLE_EQ(53223, *(it_std));
+    EXPECT_DOUBLE_EQ(53223, *(it_s21));
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-//     EXPECT_DOUBLE_EQ(23, *(--it_std));
-//     EXPECT_DOUBLE_EQ(23, *(--it_s21));
-//     EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    EXPECT_DOUBLE_EQ(23, *(--it_std));
+    EXPECT_DOUBLE_EQ(23, *(--it_s21));
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-//     EXPECT_DOUBLE_EQ(23, *(it_std--));
-//     EXPECT_DOUBLE_EQ(23, *(it_s21--));
-//     EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    EXPECT_DOUBLE_EQ(23, *(it_std--));
+    EXPECT_DOUBLE_EQ(23, *(it_s21--));
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-//     EXPECT_DOUBLE_EQ(1, *(it_std));
-//     EXPECT_DOUBLE_EQ(1, *(it_s21));
-//     EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+    EXPECT_DOUBLE_EQ(1, *(it_std));
+    EXPECT_DOUBLE_EQ(1, *(it_s21));
+    EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-//     for (double it : test) {
-//       EXPECT_DOUBLE_EQ(it, *it_s21);
-//       ++it_s21;
-//     }
+    for (double it : test) {
+      EXPECT_DOUBLE_EQ(it, *it_s21);
+      ++it_s21;
+    }
 
-//     it_s21 = test.begin();
-//     for (const double& it : test) {
-//       EXPECT_DOUBLE_EQ(it, *it_s21);
-//       ++it_s21;
-//     }
-//   }
-//   {
-//     s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
-//     std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
+    it_s21 = test.begin();
+    for (const double& it : test) {
+      EXPECT_DOUBLE_EQ(it, *it_s21);
+      ++it_s21;
+    }
+  }
+  {
+    s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
+    std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
 
-//     std::list<double>::iterator it_std = test_std.end();
-//     s21::list<double>::iterator it_s21 = test.end();
+    std::list<double>::iterator it_std = test_std.end();
+    s21::list<double>::iterator it_s21 = test.end();
 
-//     EXPECT_DOUBLE_EQ(56.6542, *(--it_std));
-//     EXPECT_DOUBLE_EQ(56.6542, *(--it_s21));
-//     // EXPECT_DOUBLE_EQ(*it_std, *it_s21);
-//   }
-// }
+    EXPECT_DOUBLE_EQ(56.6542, *(--it_std));
+    EXPECT_DOUBLE_EQ(56.6542, *(--it_s21));
+    // EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+  }
+}
 
 // TEST(test_list, capacity) {
 //   {
