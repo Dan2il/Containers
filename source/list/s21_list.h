@@ -1,5 +1,6 @@
 
 #include <iostream>  // УДАЛИТЬ
+#include <utility>
 
 // #include "../s21_containers.h"
 
@@ -15,7 +16,7 @@ struct Node {
   explicit Node(const Type& t) : Node() { data = t; };
 };
 
-template <typename Type, typename Alloc = std::allocator<Node<Type>>>
+template <typename Type>
 class list {
  public:
   class list_iterator : public std::iterator<std::forward_iterator_tag, Type> {
@@ -48,7 +49,7 @@ class list {
   explicit list(size_t count);
   list(const size_t count, const Type& value);
   explicit list(std::initializer_list<Type> const& items);
-  list(const list<Type, Alloc>& other);
+  list(const list<Type>& other);
   list(list&& other) noexcept;
 
   ~list();
@@ -91,7 +92,6 @@ class list {
   // void sort();
 
  private:
-  Alloc alloc_;
   Node<Type>* end_node_ = nullptr;
   size_t stored_ = 0;
 
@@ -103,47 +103,45 @@ class list {
   void LinkPointer(Node<Type>* for_link_next, Node<Type>* for_link_previous);
 };
 
-template <typename Type, typename Alloc>
-list<Type, Alloc>::list() : end_node_(CreateNode()) {}
+template <typename Type>
+list<Type>::list() : end_node_(CreateNode()) {}
 
-template <typename Type, typename Alloc>
-list<Type, Alloc>::list(size_t count) : list() {
+template <typename Type>
+list<Type>::list(size_t count) : list() {
   for (; stored_ < count;) {
     push_back(Type());
   }
 }
 
-template <typename Type, typename Alloc>
-list<Type, Alloc>::list(const size_t count, const Type& value) : list() {
+template <typename Type>
+list<Type>::list(const size_t count, const Type& value) : list() {
   for (; stored_ < count;) {
     push_back(value);
   }
 }
 
-template <typename Type, typename Alloc>
-s21::list<Type, Alloc>::list(std::initializer_list<Type> const& items)
-    : list() {
+template <typename Type>
+s21::list<Type>::list(std::initializer_list<Type> const& items) : list() {
   for (const Type& it : items) {
     push_back(it);
   }
 }
 
-template <typename Type, typename Alloc>
-s21::list<Type, Alloc>::list(const list<Type, Alloc>& other) : list() {
+template <typename Type>
+s21::list<Type>::list(const list<Type>& other) : list() {
   for (const Type& it : other) {
     push_back(it);
   }
 }
 
-template <typename Type, typename Alloc>
-s21::list<Type, Alloc>::list(list&& other) noexcept {
+template <typename Type>
+s21::list<Type>::list(list&& other) noexcept {
   end_node_ = std::exchange(other.end_node_, nullptr);
   stored_ = std::exchange(other.stored_, 0);
-  alloc_ = std::exchange(other.alloc_, std::allocator<Node<Type>>());
 }
 
-template <typename Type, typename Alloc>
-list<Type, Alloc>::~list() {
+template <typename Type>
+list<Type>::~list() {
   if (end_node_) {
     Node<Type>* end = end_node_;
     for (Node<Type>* node = end_node_->next_node;
@@ -161,53 +159,52 @@ list<Type, Alloc>::~list() {
 }
 
 // Capacity
-template <typename Type, typename Alloc>
-bool s21::list<Type, Alloc>::empty() const noexcept {
+template <typename Type>
+bool s21::list<Type>::empty() const noexcept {
   return !stored_;
 }
 
-template <typename Type, typename Alloc>
-size_t s21::list<Type, Alloc>::size() const noexcept {
+template <typename Type>
+size_t s21::list<Type>::size() const noexcept {
   return stored_;
 }
 
-template <typename Type, typename Alloc>
-size_t s21::list<Type, Alloc>::max_size() const noexcept {
-  if (std::numeric_limits<typename Alloc::size_type>::max() /
-          sizeof(Node<Type>) >
-      alloc_.max_size()) {
-    return alloc_.max_size();
-  }
-  return std::numeric_limits<typename Alloc::size_type>::max() /
-         sizeof(Node<Type>);
+template <typename Type>
+size_t s21::list<Type>::max_size() const noexcept {
+  // if (std::numeric_limits<typename Alloc::size_type>::max() /
+  //         sizeof(Node<Type>) >
+  //     alloc_.max_size()) {
+  //   return alloc_.max_size();
+  // }
+  return std::numeric_limits<size_t>::max() / sizeof(Node<Type>);
 }
 
-template <typename Type, typename Alloc>
-Type& s21::list<Type, Alloc>::front() {
+template <typename Type>
+Type& s21::list<Type>::front() {
   if (!end_node_->next_node) {
     return end_node_->data;
   }
   return end_node_->next_node->data;
 }
 
-template <typename Type, typename Alloc>
-const Type& s21::list<Type, Alloc>::front() const {
+template <typename Type>
+const Type& s21::list<Type>::front() const {
   if (!end_node_->next_node) {
     return end_node_->data;
   }
   return end_node_->next_node->data;
 }
 
-template <typename Type, typename Alloc>
-Type& s21::list<Type, Alloc>::back() {
+template <typename Type>
+Type& s21::list<Type>::back() {
   if (!end_node_->previous_node) {
     return end_node_->data;
   }
   return end_node_->previous_node->data;
 }
 
-template <typename Type, typename Alloc>
-const Type& s21::list<Type, Alloc>::back() const {
+template <typename Type>
+const Type& s21::list<Type>::back() const {
   if (!end_node_->previous_node) {
     return end_node_->data;
   }
@@ -216,17 +213,17 @@ const Type& s21::list<Type, Alloc>::back() const {
 
 // Modifiers
 
-template <typename Type, typename Alloc>
-void s21::list<Type, Alloc>::clear() {
+template <typename Type>
+void s21::list<Type>::clear() {
   if (stored_ && end_node_) {
     pop_front();
     clear();
   }
 }
 
-template <typename Type, typename Alloc>
-typename s21::list<Type, Alloc>::iterator s21::list<Type, Alloc>::insert(
-    iterator pos, const Type& value) {
+template <typename Type>
+typename s21::list<Type>::iterator s21::list<Type>::insert(iterator pos,
+                                                           const Type& value) {
   Node<Type>* new_node = CreateNode(value);
   Node<Type>* pos_node = pos.link_node_;
   Node<Type>* next_pos_node = pos_node->next_node;
@@ -241,8 +238,8 @@ typename s21::list<Type, Alloc>::iterator s21::list<Type, Alloc>::insert(
   return iterator(this, new_node);
 }
 
-template <typename Type, typename Alloc>
-void s21::list<Type, Alloc>::push_back(const Type& value) {
+template <typename Type>
+void s21::list<Type>::push_back(const Type& value) {
   Node<Type>* push = CreateNode(value);
   if (!stored_) {
     end_node_->previous_node = push;
@@ -262,8 +259,8 @@ void s21::list<Type, Alloc>::push_back(const Type& value) {
   ++stored_;
 }
 
-template <typename Type, typename Alloc>
-void s21::list<Type, Alloc>::push_front(const Type& value) {
+template <typename Type>
+void s21::list<Type>::push_front(const Type& value) {
   Node<Type>* push = CreateNode(value);
   if (!stored_) {
     end_node_->next_node = push;
@@ -282,8 +279,8 @@ void s21::list<Type, Alloc>::push_front(const Type& value) {
   }
 }
 
-template <typename Type, typename Alloc>
-void s21::list<Type, Alloc>::pop_front() {
+template <typename Type>
+void s21::list<Type>::pop_front() {
   if (end_node_ && stored_) {
     if (stored_ > 1) {
       Node<Type>* del_node = end_node_->next_node;
@@ -302,8 +299,8 @@ void s21::list<Type, Alloc>::pop_front() {
   }
 }
 
-template <typename Type, typename Alloc>
-void s21::list<Type, Alloc>::pop_back() {
+template <typename Type>
+void s21::list<Type>::pop_back() {
   if (end_node_ && stored_) {
     if (stored_ > 1) {
       Node<Type>* del_node = end_node_->previous_node;
@@ -322,123 +319,112 @@ void s21::list<Type, Alloc>::pop_back() {
   }
 }
 
-template <typename Type, typename Alloc>
-Node<Type>* s21::list<Type, Alloc>::CreateNode() {
-  Node<Type>* for_create = alloc_.allocate(1);
-  alloc_.construct(for_create);
+template <typename Type>
+Node<Type>* s21::list<Type>::CreateNode() {
+  Node<Type>* for_create = new Node<Type>;
   return for_create;
 }
 
-template <typename Type, typename Alloc>
-Node<Type>* s21::list<Type, Alloc>::CreateNode(const Type& data) {
-  Node<Type>* for_create = alloc_.allocate(1);
-  alloc_.construct(for_create, data);
+template <typename Type>
+Node<Type>* s21::list<Type>::CreateNode(const Type& data) {
+  Node<Type>* for_create = new Node<Type>(data);
   return for_create;
 }
 
-template <typename Type, typename Alloc>
-void s21::list<Type, Alloc>::FreeNode(Node<Type>* node) {
+template <typename Type>
+void s21::list<Type>::FreeNode(Node<Type>* node) {
   if (!node) {
     throw std::invalid_argument("destroy nullptr node");
   }
-  alloc_.destroy(node);
-  alloc_.deallocate(node, 1);
+  delete node;
 }
 
-template <typename Type, typename Alloc>
-void s21::list<Type, Alloc>::LinkPointer(Node<Type>* for_link_next,
-                                         Node<Type>* for_link_previous) {
+template <typename Type>
+void s21::list<Type>::LinkPointer(Node<Type>* for_link_next,
+                                  Node<Type>* for_link_previous) {
   for_link_next->next_node = for_link_previous;
   for_link_previous->previous_node = for_link_next;
 }
 
 // Iterators
 
-template <typename Type, typename Alloc>
-typename list<Type, Alloc>::iterator s21::list<Type, Alloc>::begin() {
+template <typename Type>
+typename list<Type>::iterator s21::list<Type>::begin() {
   if (!stored_) {
     return iterator(this, end_node_);
   }
   return iterator(this, end_node_->next_node);
 }
 
-template <typename Type, typename Alloc>
-typename list<Type, Alloc>::const_iterator s21::list<Type, Alloc>::begin()
-    const {
+template <typename Type>
+typename list<Type>::const_iterator s21::list<Type>::begin() const {
   if (!stored_) {
     return iterator(this, end_node_);
   }
   return const_iterator(this, end_node_->next_node);
 }
 
-template <typename Type, typename Alloc>
-typename list<Type, Alloc>::iterator s21::list<Type, Alloc>::end() {
+template <typename Type>
+typename list<Type>::iterator s21::list<Type>::end() {
   return iterator(this, end_node_);
 }
 
-template <typename Type, typename Alloc>
-typename list<Type, Alloc>::const_iterator s21::list<Type, Alloc>::end() const {
+template <typename Type>
+typename list<Type>::const_iterator s21::list<Type>::end() const {
   return const_iterator(this, end_node_);
 }
 
-template <typename Type, typename Alloc>
-s21::list<Type, Alloc>::iterator::list_iterator()
+template <typename Type>
+s21::list<Type>::iterator::list_iterator()
     : link_list_(nullptr), link_node_(nullptr) {}
 
-template <typename Type, typename Alloc>
-list<Type, Alloc>::iterator::list_iterator(const list<Type>* list,
-                                           Node<Type>* node)
+template <typename Type>
+list<Type>::iterator::list_iterator(const list<Type>* list, Node<Type>* node)
     : link_list_(list), link_node_(node) {}
 
-template <typename Type, typename Alloc>
-Type& list<Type, Alloc>::iterator::operator*() {
+template <typename Type>
+Type& list<Type>::iterator::operator*() {
   return link_node_->data;
 }
 
-template <typename Type, typename Alloc>
-bool list<Type, Alloc>::list_iterator::operator!=(
-    const list_iterator& other_it) {
+template <typename Type>
+bool list<Type>::list_iterator::operator!=(const list_iterator& other_it) {
   return !(*this == other_it);
 }
 
-template <typename Type, typename Alloc>
-bool list<Type, Alloc>::list_iterator::operator==(
-    const list_iterator& other_it) {
+template <typename Type>
+bool list<Type>::list_iterator::operator==(const list_iterator& other_it) {
   return link_list_ == other_it.link_list_ && link_node_ == other_it.link_node_;
 }
 
-template <typename Type, typename Alloc>
-typename list<Type, Alloc>::list_iterator
-list<Type, Alloc>::list_iterator::operator++() {
+template <typename Type>
+typename list<Type>::list_iterator list<Type>::list_iterator::operator++() {
   if (link_node_ != nullptr) {
     link_node_ = link_node_->next_node;
   }
   return *this;
 }
 
-template <typename Type, typename Alloc>
-typename list<Type, Alloc>::list_iterator
-list<Type, Alloc>::list_iterator::operator++(int) {
-  list<Type, Alloc>::iterator copy(link_list_, link_node_);
+template <typename Type>
+typename list<Type>::list_iterator list<Type>::list_iterator::operator++(int) {
+  list<Type>::iterator copy(link_list_, link_node_);
   if (link_node_) {
     link_node_ = link_node_->next_node;
   }
   return copy;
 }
 
-template <typename Type, typename Alloc>
-typename list<Type, Alloc>::list_iterator
-list<Type, Alloc>::list_iterator::operator--() {
+template <typename Type>
+typename list<Type>::list_iterator list<Type>::list_iterator::operator--() {
   if (link_node_ != nullptr) {
     link_node_ = link_node_->previous_node;
   }
   return *this;
 }
 
-template <typename Type, typename Alloc>
-typename list<Type, Alloc>::list_iterator
-list<Type, Alloc>::list_iterator::operator--(int) {
-  list<Type, Alloc>::iterator copy(link_list_, link_node_);
+template <typename Type>
+typename list<Type>::list_iterator list<Type>::list_iterator::operator--(int) {
+  list<Type>::iterator copy(link_list_, link_node_);
   if (link_node_) {
     link_node_ = link_node_->previous_node;
   }
