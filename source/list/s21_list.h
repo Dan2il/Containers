@@ -284,12 +284,20 @@ void s21::list<Type, Alloc>::pop_front() {
 
 template <typename Type, typename Alloc>
 void s21::list<Type, Alloc>::pop_back() {
-  if (end_node_->next_node != end_node_->previous_node) {
-    Node<Type>* end_node = end_node_->previous_node;
-    Node<Type>* del_node = end_node->previous_node;
-    end_node->previous_node = del_node->previous_node;
-    end_node->previous_node->next_node = del_node->next_node;
-    FreeNode(del_node);
+  if (end_node_ && stored_) {
+    if (stored_ > 1) {
+      Node<Type>* del_node = end_node_->previous_node;
+      Node<Type>* prev_node = del_node->previous_node;
+
+      end_node_->previous_node = prev_node;
+      prev_node->next_node = end_node_;
+
+      FreeNode(del_node);
+    } else {
+      FreeNode(end_node_->next_node);
+      end_node_->next_node = nullptr;
+      end_node_->previous_node = nullptr;
+    }
     --stored_;
   }
 }
