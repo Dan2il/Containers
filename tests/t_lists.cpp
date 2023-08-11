@@ -385,113 +385,113 @@ TEST(test_list, iterators) {
   }
 }
 
-// TEST(test_list, capacity) {
-//   {
-//     s21::list<double> test_d{1,     23,          53223,  543, 134234,
-//                              54,    56.6542,     583459, 0,   245,
-//                              23523, 23535.45244, 9.999};
-//     std::list<double> test_std_d{1,     23,          53223,  543, 134234,
-//                                  54,    56.6542,     583459, 0,   245,
-//                                  23523, 23535.45244, 9.999};
+TEST(test_list, capacity) {
+  {
+    s21::list<double> test_d{1,     23,          53223,  543, 134234,
+                             54,    56.6542,     583459, 0,   245,
+                             23523, 23535.45244, 9.999};
+    std::list<double> test_std_d{1,     23,          53223,  543, 134234,
+                                 54,    56.6542,     583459, 0,   245,
+                                 23523, 23535.45244, 9.999};
 
-//     EXPECT_FALSE(test_d.empty());
-//     EXPECT_EQ(test_std_d.empty(), test_d.empty());
+    EXPECT_FALSE(test_d.empty());
+    EXPECT_EQ(test_std_d.empty(), test_d.empty());
 
-//     EXPECT_EQ(13, test_d.size());
-//     EXPECT_EQ(test_std_d.size(), test_d.size());
+    EXPECT_EQ(13, test_d.size());
+    EXPECT_EQ(test_std_d.size(), test_d.size());
 
-//     EXPECT_EQ(test_std_d.max_size(), test_d.max_size());
-//   }
-//   {
-//     s21::list<int> test_i{1,      23, 53223, 543,   134234, 54, 56,
-//                           583459, 0,  245,   23523, 23535,  9};
-//     std::list<int> test_std_i{1,      23, 53223, 543,   134234, 54, 56,
-//                               583459, 0,  245,   23523, 23535,  9};
+    EXPECT_EQ(test_std_d.max_size(), test_d.max_size());
+  }
+  {
+    s21::list<int> test_i{1,      23, 53223, 543,   134234, 54, 56,
+                          583459, 0,  245,   23523, 23535,  9};
+    std::list<int> test_std_i{1,      23, 53223, 543,   134234, 54, 56,
+                              583459, 0,  245,   23523, 23535,  9};
 
-//     EXPECT_FALSE(test_i.empty());
-//     EXPECT_EQ(test_std_i.empty(), test_i.empty());
+    EXPECT_FALSE(test_i.empty());
+    EXPECT_EQ(test_std_i.empty(), test_i.empty());
 
-//     EXPECT_EQ(13, test_i.size());
-//     EXPECT_EQ(test_std_i.size(), test_i.size());
+    EXPECT_EQ(13, test_i.size());
+    EXPECT_EQ(test_std_i.size(), test_i.size());
 
-//     EXPECT_EQ(test_std_i.max_size(), test_i.max_size());
-//   }
-//   {
-//     s21::list<unsigned long long int> test_ulli{
-//         1, 23, 53223, 543, 134234, 54, 56, 583459, 0, 245, 23523, 23535, 9};
-//     std::list<unsigned long long int> test_std_ulli{
-//         1, 23, 53223, 543, 134234, 54, 56, 583459, 0, 245, 23523, 23535, 9};
+    EXPECT_EQ(test_std_i.max_size(), test_i.max_size());
+  }
+  {
+    s21::list<unsigned long long int> test_ulli{
+        1, 23, 53223, 543, 134234, 54, 56, 583459, 0, 245, 23523, 23535, 9};
+    std::list<unsigned long long int> test_std_ulli{
+        1, 23, 53223, 543, 134234, 54, 56, 583459, 0, 245, 23523, 23535, 9};
 
-//     EXPECT_FALSE(test_ulli.empty());
-//     EXPECT_EQ(test_std_ulli.empty(), test_ulli.empty());
+    EXPECT_FALSE(test_ulli.empty());
+    EXPECT_EQ(test_std_ulli.empty(), test_ulli.empty());
 
-//     EXPECT_EQ(13, test_ulli.size());
-//     EXPECT_EQ(test_std_ulli.size(), test_ulli.size());
+    EXPECT_EQ(13, test_ulli.size());
+    EXPECT_EQ(test_std_ulli.size(), test_ulli.size());
 
-//     EXPECT_EQ(test_std_ulli.max_size(), test_ulli.max_size());
-//   }
-//   {
-//     struct Test {
-//       int t1;
-//       double t2;
-//       size_t t3;
-//     };
+    EXPECT_EQ(test_std_ulli.max_size(), test_ulli.max_size());
+  }
+  {
+    struct Test {
+      int t1;
+      double t2;
+      size_t t3;
+    };
 
-//     s21::list<Test> test_t{{1, 2.3, 5}, {1, 2.3, 5}, {1, 2.3, 5},
-//                            {1, 2.3, 5}, {1, 2.3, 5}, {1, 2.3, 5}};
-//     std::list<Test> test_std_t{{1, 2.3, 5}, {1, 2.3, 5}, {1, 2.3, 5},
-//                                {1, 2.3, 5}, {1, 2.3, 5}, {1, 2.3, 5}};
+    s21::list<Test> test_t{{1, 2.3, 5}, {1, 2.3, 5}, {1, 2.3, 5},
+                           {1, 2.3, 5}, {1, 2.3, 5}, {1, 2.3, 5}};
+    std::list<Test> test_std_t{{1, 2.3, 5}, {1, 2.3, 5}, {1, 2.3, 5},
+                               {1, 2.3, 5}, {1, 2.3, 5}, {1, 2.3, 5}};
 
-//     EXPECT_FALSE(test_t.empty());
-//     EXPECT_EQ(test_std_t.empty(), test_t.empty());
+    EXPECT_FALSE(test_t.empty());
+    EXPECT_EQ(test_std_t.empty(), test_t.empty());
 
-//     EXPECT_EQ(6, test_t.size());
-//     EXPECT_EQ(test_std_t.size(), test_t.size());
+    EXPECT_EQ(6, test_t.size());
+    EXPECT_EQ(test_std_t.size(), test_t.size());
 
-//     EXPECT_EQ(test_std_t.max_size(), test_t.max_size());
-//   }
-//   {
-//     s21::list<std::string> test_s{"wfwefwe", "yjtynt", "sdfefwe"};
-//     std::list<std::string> test_std_s{"wfwefwe", "yjtynt", "sdfefwe"};
+    EXPECT_EQ(test_std_t.max_size(), test_t.max_size());
+  }
+  {
+    s21::list<std::string> test_s{"wfwefwe", "yjtynt", "sdfefwe"};
+    std::list<std::string> test_std_s{"wfwefwe", "yjtynt", "sdfefwe"};
 
-//     EXPECT_FALSE(test_s.empty());
-//     EXPECT_EQ(test_std_s.empty(), test_s.empty());
+    EXPECT_FALSE(test_s.empty());
+    EXPECT_EQ(test_std_s.empty(), test_s.empty());
 
-//     EXPECT_EQ(3, test_s.size());
-//     EXPECT_EQ(test_std_s.size(), test_s.size());
+    EXPECT_EQ(3, test_s.size());
+    EXPECT_EQ(test_std_s.size(), test_s.size());
 
-//     EXPECT_EQ(test_std_s.max_size(), test_s.max_size());
-//   }
-//   {
-//     s21::list<char> test_ch;
-//     std::list<char> test_std_ch;
+    EXPECT_EQ(test_std_s.max_size(), test_s.max_size());
+  }
+  {
+    s21::list<char> test_ch;
+    std::list<char> test_std_ch;
 
-//     EXPECT_TRUE(test_ch.empty());
-//     EXPECT_EQ(test_std_ch.empty(), test_ch.empty());
+    EXPECT_TRUE(test_ch.empty());
+    EXPECT_EQ(test_std_ch.empty(), test_ch.empty());
 
-//     EXPECT_EQ(0, test_ch.size());
-//     EXPECT_EQ(test_std_ch.size(), test_ch.size());
+    EXPECT_EQ(0, test_ch.size());
+    EXPECT_EQ(test_std_ch.size(), test_ch.size());
 
-//     EXPECT_EQ(test_std_ch.max_size(), test_ch.max_size());
-//   }
-// }
+    EXPECT_EQ(test_std_ch.max_size(), test_ch.max_size());
+  }
+}
 
 // TEST(test_list, clear) {
-//   s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
-//   std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
+// s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
+// std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
 
-//   test.clear();
-//   test_std.clear();
+// test.clear();
+// test_std.clear();
 
-//   EXPECT_EQ(0, test.size());
-//   EXPECT_TRUE(test.empty());
-//   EXPECT_EQ(test_std.empty(), test.empty());
+// EXPECT_EQ(0, test.size());
+// EXPECT_TRUE(test.empty());
+// EXPECT_EQ(test_std.empty(), test.empty());
 
-//   EXPECT_EQ(test_std.front(), test.front());
-//   EXPECT_EQ(test_std.back(), test.back());
+// EXPECT_EQ(test_std.front(), test.front());
+// EXPECT_EQ(test_std.back(), test.back());
 
-//   EXPECT_EQ(*test_std.begin(), *test.begin());
-//   EXPECT_EQ(*test_std.end(), *test.end());
+// EXPECT_EQ(*test_std.begin(), *test.begin());
+// EXPECT_EQ(*test_std.end(), *test.end());
 // }
 
 // TEST(test_list, insert) {
@@ -578,59 +578,59 @@ TEST(test_list, push_back) {
   EXPECT_DOUBLE_EQ(test_std.back(), test.back());
 }
 
-// TEST(test_list, pop_front) {
-//   s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
-//   std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
+TEST(test_list, pop_front) {
+  s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
+  std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
 
-//   test.pop_front();
-//   test_std.pop_front();
+  test.pop_front();
+  test_std.pop_front();
 
-//   EXPECT_DOUBLE_EQ(23, test.front());
-//   EXPECT_DOUBLE_EQ(test_std.front(), test.front());
-//   EXPECT_EQ(6, test.size());
+  EXPECT_DOUBLE_EQ(23, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(6, test.size());
 
-//   test.pop_front();
-//   test_std.pop_front();
+  test.pop_front();
+  test_std.pop_front();
 
-//   EXPECT_DOUBLE_EQ(53223, test.front());
-//   EXPECT_DOUBLE_EQ(test_std.front(), test.front());
-//   EXPECT_EQ(5, test.size());
+  EXPECT_DOUBLE_EQ(53223, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(5, test.size());
 
-//   test.pop_front();
-//   test_std.pop_front();
+  test.pop_front();
+  test_std.pop_front();
 
-//   EXPECT_DOUBLE_EQ(543, test.front());
-//   EXPECT_DOUBLE_EQ(test_std.front(), test.front());
-//   EXPECT_EQ(4, test.size());
+  EXPECT_DOUBLE_EQ(543, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(4, test.size());
 
-//   test.pop_front();
-//   test_std.pop_front();
+  test.pop_front();
+  test_std.pop_front();
 
-//   EXPECT_DOUBLE_EQ(134234, test.front());
-//   EXPECT_DOUBLE_EQ(test_std.front(), test.front());
-//   EXPECT_EQ(3, test.size());
+  EXPECT_DOUBLE_EQ(134234, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(3, test.size());
 
-//   test.pop_front();
-//   test_std.pop_front();
+  test.pop_front();
+  test_std.pop_front();
 
-//   EXPECT_DOUBLE_EQ(54, test.front());
-//   EXPECT_DOUBLE_EQ(test_std.front(), test.front());
-//   EXPECT_EQ(2, test.size());
+  EXPECT_DOUBLE_EQ(54, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(2, test.size());
 
-//   test.pop_front();
-//   test_std.pop_front();
+  test.pop_front();
+  test_std.pop_front();
 
-//   EXPECT_DOUBLE_EQ(56.6542, test.front());
-//   EXPECT_DOUBLE_EQ(test_std.front(), test.front());
-//   EXPECT_EQ(1, test.size());
+  EXPECT_DOUBLE_EQ(56.6542, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(1, test.size());
 
-//   test.pop_front();
-//   test_std.pop_front();
+  test.pop_front();
+  test_std.pop_front();
 
-//   EXPECT_DOUBLE_EQ(0, test.front());
-//   EXPECT_DOUBLE_EQ(test_std.front(), test.front());
-//   EXPECT_EQ(0, test.size());
-// }
+  EXPECT_DOUBLE_EQ(0, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(0, test.size());
+}
 
 // TEST(test_list, pop_back) {
 //   s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
