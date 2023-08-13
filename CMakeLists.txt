@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-project(S21Matrix)
+project(s21Containers)
 include(FetchContent)
 FetchContent_Declare(
     googletest
