@@ -27,6 +27,7 @@ class list {
     list_iterator(const list<Type>* list, Node<Type>* node);
 
     Type& operator*();
+    const Type& operator*() const;
 
     bool operator!=(const list_iterator& other_it);
     bool operator==(const list_iterator& other_it);
@@ -48,7 +49,7 @@ class list {
   list();
   explicit list(size_t count);
   list(const size_t count, const Type& value);
-  explicit list(std::initializer_list<Type> const& items);
+  list(std::initializer_list<Type> const& items);
   list(const list<Type>& other);
   list(list&& other) noexcept;
 
@@ -85,15 +86,24 @@ class list {
   void pop_back();
 
   void swap(list& other);
-  // void merge(list& other);
+  void merge(list& other);
   // void splice(const_iterator pos, list& other);
   // void reverse();
   // void unique();
   // void sort();
 
+  // Operators
+
+  list& operator=(list&& other) noexcept;
+
+  bool operator==(const list& other) const;
+  bool operator!=(const list& other) const;
+
  private:
   Node<Type>* end_node_ = nullptr;
   size_t stored_ = 0;
+
+  void DeleteList();
 
   Node<Type>* CreateNode();
   Node<Type>* CreateNode(const Type& data);
@@ -136,26 +146,14 @@ s21::list<Type>::list(const list<Type>& other) : list() {
 
 template <typename Type>
 s21::list<Type>::list(list&& other) noexcept {
-  end_node_ = std::exchange(other.end_node_, nullptr);
-  stored_ = std::exchange(other.stored_, 0);
+  *this = std::move(other);
+  // end_node_ = std::exchange(other.end_node_, nullptr);
+  // stored_ = std::exchange(other.stored_, 0);
 }
 
 template <typename Type>
 list<Type>::~list() {
-  if (end_node_) {
-    Node<Type>* end = end_node_;
-    for (Node<Type>* node = end_node_->next_node;
-         node != nullptr && node != end;) {
-      Node<Type>* dealloc = node;
-      node = node->next_node;
-      FreeNode(dealloc);
-    }
-    if (end) {
-      FreeNode(end);
-    }
-  }
-  stored_ = 0;
-  end_node_ = nullptr;
+  DeleteList();
 }
 
 // Capacity
@@ -338,6 +336,91 @@ void s21::list<Type>::swap(list& other) {
 }
 
 template <typename Type>
+void s21::list<Type>::merge(list& other) {
+  // if (this != other && other.stored_) {
+  if (!end_node_ || !stored_) {
+    *this = std::move(other);
+    other.end_node_ = CreateNode();
+  } else {
+    // Node<Type>* check_node = other.end_node_->next_node;
+    Node<Type>* pos_push_this = end_node_->next_node;
+    while (other.stored_) {
+      Node<Type>* check_node = other.end_node_->next_node;
+      if (check_node->data < pos_push_this->data) {
+        Node<Type>* prev_pos_push_this = pos_push_this->previous_node;
+
+        Node<Type>* other_next = check_node->next_node;
+        other.end_node_->next_node = check_node;
+        other_next->previous_node = end_node_;
+
+        prev_pos_push_this->next_node = check_node;
+        check_node->next_node = pos_push_this;
+
+        pos_push_this->previous_node = check_node;
+        check_node->previous_node = prev_pos_push_this;
+        other.stored_--;
+      }
+      pos_push_this = pos_push_this->next_node;
+      if (pos_push_this == end_node_) {
+        break;
+      }
+    }
+  }
+  // }
+}
+
+template <typename Type>
+list<Type>& s21::list<Type>::operator=(list&& other) noexcept {
+  if (*this != other) {
+    if (end_node_) {
+      DeleteList();
+    }
+    end_node_ = std::exchange(other.end_node_, nullptr);
+    stored_ = std::exchange(other.stored_, 0);
+  }
+  return *this;
+}
+
+template <typename Type>
+bool s21::list<Type>::operator==(const list& other) const {
+  if ((stored_ != other.stored_) || (!end_node_ && other.end_node_) ||
+      (end_node_ && !other.end_node_)) {
+    return false;
+  }
+  s21::list<Type>::iterator it_other = other.begin();
+  for (const Type& data : *this) {
+    if (data != *it_other) {
+      return false;
+    }
+    ++it_other;
+  }
+  return true;
+}
+
+template <typename Type>
+bool s21::list<Type>::operator!=(const list& other) const {
+  return !(*this == other);
+}
+
+template <typename Type>
+void s21::list<Type>::DeleteList() {
+  if (end_node_) {
+    Node<Type>* end = end_node_;
+    for (Node<Type>* node = end_node_->next_node;
+         node != nullptr && node != end;) {
+      Node<Type>* dealloc = node;
+      node = node->next_node;
+      FreeNode(dealloc);
+    }
+    if (end) {
+      FreeNode(end);
+    }
+  }
+  stored_ = 0;
+  end_node_ = nullptr;
+}
+
+template <typename Type>
 Node<Type>* s21::list<Type>::CreateNode() {
   Node<Type>* for_create = new Node<Type>;
   return for_create;
@@ -402,6 +485,11 @@ list<Type>::iterator::list_iterator(const list<Type>* list, Node<Type>* node)
 
 template <typename Type>
 Type& list<Type>::iterator::operator*() {
+  return link_node_->data;
+}
+
+template <typename Type>
+const Type& list<Type>::const_iterator::operator*() const {
   return link_node_->data;
 }
 
