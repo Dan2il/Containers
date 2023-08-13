@@ -814,7 +814,116 @@ TEST(test_list, merge) {
 
     list1.merge(list2);
 
-    EXPECT_EQ(s21::list<int>({1, 2, 3, 3, 3, 4, 4, 5, 7, 8, 9}), list1);
+    std::list<int> list1_std = {1, 3, 3, 5, 9};
+    std::list<int> list2_std = {2, 3, 4, 4, 7, 8};
+
+    list1_std.merge(list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+
+    EXPECT_EQ(11, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+
+    EXPECT_EQ(0, list2.size());
+    EXPECT_EQ(list2_std.size(), list2.size());
+  }
+  {
+    s21::list<int> list1;
+    s21::list<int> list2 = {2, 3, 4, 4, 7, 8};
+
+    list1.merge(list2);
+
+    std::list<int> list1_std;
+    std::list<int> list2_std = {2, 3, 4, 4, 7, 8};
+
+    list1_std.merge(list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+
+    EXPECT_EQ(6, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+
+    EXPECT_EQ(0, list2.size());
+    EXPECT_EQ(list2_std.size(), list2.size());
+  }
+
+  {
+    s21::list<int> list1 = {1, 3, 3, 5, 9};
+    s21::list<int> list2;
+
+    list1.merge(list2);
+
+    std::list<int> list1_std = {1, 3, 3, 5, 9};
+    std::list<int> list2_std;
+
+    list1_std.merge(list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+
+    EXPECT_EQ(5, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+
+    EXPECT_EQ(0, list2.size());
+    EXPECT_EQ(list2_std.size(), list2.size());
+  }
+
+  {
+    s21::list<int> list1 = {1};
+    s21::list<int> list2 = {2, 3, 4, 4, 7, 8};
+
+    list1.merge(list2);
+
+    std::list<int> list1_std = {1};
+    std::list<int> list2_std = {2, 3, 4, 4, 7, 8};
+
+    list1_std.merge(list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+
+    EXPECT_EQ(7, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+
+    EXPECT_EQ(0, list2.size());
+    EXPECT_EQ(list2_std.size(), list2.size());
+  }
+  {
+    s21::list<int> list1 = {1, 3, 3, 5, 9};
+    s21::list<int> list2 = {2};
+
+    list1.merge(list2);
+
+    std::list<int> list1_std = {1, 3, 3, 5, 9};
+    std::list<int> list2_std = {2};
+
+    list1_std.merge(list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+
+    EXPECT_EQ(6, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+
+    EXPECT_EQ(0, list2.size());
+    EXPECT_EQ(list2_std.size(), list2.size());
   }
 }
 
