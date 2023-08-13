@@ -342,26 +342,15 @@ void s21::list<Type>::merge(list& other) {
     *this = std::move(other);
     other.end_node_ = CreateNode();
   } else {
-    // Node<Type>* check_node = other.end_node_->next_node;
-    Node<Type>* pos_push_this = end_node_->next_node;
-    while (other.stored_) {
-      Node<Type>* check_node = other.end_node_->next_node;
-      if (check_node->data < pos_push_this->data) {
-        Node<Type>* prev_pos_push_this = pos_push_this->previous_node;
+    for (s21::list<Type>::iterator it_this = begin(); it_this != end();
+         ++it_this) {
+      if (*other.begin() < *it_this) {
+        insert(it_this, *other.begin());
+        other.pop_front();
 
-        Node<Type>* other_next = check_node->next_node;
-        other.end_node_->next_node = check_node;
-        other_next->previous_node = end_node_;
-
-        prev_pos_push_this->next_node = check_node;
-        check_node->next_node = pos_push_this;
-
-        pos_push_this->previous_node = check_node;
-        check_node->previous_node = prev_pos_push_this;
-        other.stored_--;
+        it_this = begin();
       }
-      pos_push_this = pos_push_this->next_node;
-      if (pos_push_this == end_node_) {
+      if (!other.stored_) {
         break;
       }
     }
