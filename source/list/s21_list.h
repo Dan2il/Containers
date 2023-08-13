@@ -112,8 +112,8 @@ class list {
 
   void FreeNode(Node<Type>* node);
 
-  void LinkPointerNode(pointer_node prev_pos, pointer_node pos,
-                       pointer_node first, pointer_node last);
+  void LinkPointerNodeRange(pointer_node prev_pos, pointer_node pos,
+                            pointer_node first, pointer_node last);
   // void LinkPointer(Node<Type>* for_link_next, Node<Type>* for_link_previous);
 };
 
@@ -350,9 +350,9 @@ void s21::list<Type>::merge(list& other) {
         if (*other.begin() < *it_this) {
           Node<Type>* other_link = other.end_node_->next_node->next_node;
 
-          LinkPointerNode(it_this.link_node_->previous_node, it_this.link_node_,
-                          other.end_node_->next_node,
-                          other.end_node_->next_node);
+          LinkPointerNodeRange(it_this.link_node_->previous_node,
+                               it_this.link_node_, other.end_node_->next_node,
+                               other.end_node_->next_node);
 
           stored_++;
 
@@ -382,12 +382,12 @@ void s21::list<Type>::splice(const_iterator pos, list& other) {
       throw std::invalid_argument("Node is nullptr");
     }
     if (!stored_) {
-      LinkPointerNode(end_node_, end_node_, other.end_node_->next_node,
-                      other.end_node_->previous_node);
+      LinkPointerNodeRange(end_node_, end_node_, other.end_node_->next_node,
+                           other.end_node_->previous_node);
     } else {
-      LinkPointerNode(pos.link_node_->previous_node, pos.link_node_,
-                      other.end_node_->next_node,
-                      other.end_node_->previous_node);
+      LinkPointerNodeRange(pos.link_node_->previous_node, pos.link_node_,
+                           other.end_node_->next_node,
+                           other.end_node_->previous_node);
     }
     stored_ += other.stored_;
 
@@ -469,8 +469,9 @@ void s21::list<Type>::FreeNode(Node<Type>* node) {
 }
 
 template <typename Type>
-void s21::list<Type>::LinkPointerNode(pointer_node prev_pos, pointer_node pos,
-                                      pointer_node first, pointer_node last) {
+void s21::list<Type>::LinkPointerNodeRange(pointer_node prev_pos,
+                                           pointer_node pos, pointer_node first,
+                                           pointer_node last) {
   prev_pos->next_node = first;
   last->next_node = pos;
 
