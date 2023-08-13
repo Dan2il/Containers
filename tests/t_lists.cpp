@@ -771,3 +771,38 @@ TEST(test_list, pop_back) {
   EXPECT_DOUBLE_EQ(test_std.back(), test.back());
   EXPECT_EQ(0, test.size());
 }
+
+TEST(test_list, swap) {
+  {
+    s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
+
+    s21::list<double> test_2{657567, 3345, 2354234, 345, 879798, 456356};
+
+    test.swap(test_2);
+
+    EXPECT_EQ(6, test.size());
+    EXPECT_EQ(7, test_2.size());
+
+    EXPECT_DOUBLE_EQ(657567, test.front());
+    EXPECT_DOUBLE_EQ(1, test_2.front());
+
+    EXPECT_DOUBLE_EQ(456356, test.back());
+    EXPECT_DOUBLE_EQ(56.6542, test_2.back());
+  }
+  {
+    s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
+
+    s21::list<double> test_2;
+
+    test.swap(test_2);
+
+    EXPECT_EQ(0, test.size());
+    EXPECT_EQ(7, test_2.size());
+
+    EXPECT_DOUBLE_EQ(0, test.front());
+    EXPECT_DOUBLE_EQ(1, test_2.front());
+
+    EXPECT_DOUBLE_EQ(0, test.back());
+    EXPECT_DOUBLE_EQ(56.6542, test_2.back());
+  }
+}
