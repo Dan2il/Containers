@@ -543,55 +543,43 @@ TEST(test_list, clear) {
     EXPECT_TRUE(test.empty());
     EXPECT_EQ(test_std.empty(), test.empty());
 
-    // EXPECT_EQ(test_std.front(), test.front());
-    // EXPECT_EQ(test_std.back(), test.back());
+    test_move.clear();
+    test_std_move.clear();
 
-    // EXPECT_EQ(*test_std.begin(), *test.begin());
-    // EXPECT_EQ(*test_std.end(), *test.end());
-
-    // test_move.clear();
-    // test_std_move.clear();
-
-    // EXPECT_EQ(0, test_move.size());
-    // EXPECT_TRUE(test_move.empty());
-    // EXPECT_EQ(test_std_move.empty(), test_move.empty());
-
-    // EXPECT_EQ(test_std_move.front(), test_move.front());
-    // EXPECT_EQ(test_std_move.back(), test_move.back());
-
-    // EXPECT_EQ(*test_std_move.begin(), *test_move.begin());
-    // EXPECT_EQ(*test_std_move.end(), *test_move.end());
+    EXPECT_EQ(0, test_move.size());
+    EXPECT_TRUE(test_move.empty());
+    EXPECT_EQ(test_std_move.empty(), test_move.empty());
   }
 }
 
-// TEST(test_list, insert) {
-//   s21::list<size_t> test;
-//   std::list<size_t> test_std;
+TEST(test_list, insert) {
+  s21::list<size_t> test;
+  std::list<size_t> test_std;
 
-//   EXPECT_EQ(0, test.size());
-//   EXPECT_TRUE(test.empty());
-//   EXPECT_EQ(test_std.empty(), test.empty());
+  EXPECT_EQ(0, test.size());
+  EXPECT_TRUE(test.empty());
+  EXPECT_EQ(test_std.empty(), test.empty());
 
-//   s21::list<size_t>::iterator it_s21 = test.insert(test.begin(), 25);
-//   std::list<size_t>::iterator it_std = test_std.insert(test_std.begin(), 25);
+  s21::list<size_t>::iterator it_s21 = test.insert(test.begin(), 25);
+  std::list<size_t>::iterator it_std = test_std.insert(test_std.begin(), 25);
 
-//   EXPECT_DOUBLE_EQ(25, test.front());
-//   EXPECT_DOUBLE_EQ(test_std.front(), test.front());
-//   EXPECT_EQ(1, test.size());
+  EXPECT_DOUBLE_EQ(25, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_EQ(1, test.size());
 
-//   EXPECT_DOUBLE_EQ(25, *it_s21);
-//   EXPECT_DOUBLE_EQ(*it_std, *it_s21);
+  EXPECT_DOUBLE_EQ(25, *it_s21);
+  EXPECT_DOUBLE_EQ(*it_std, *it_s21);
 
-//   s21::list<size_t>::iterator it_s21_2 = test.insert(it_s21, 234234);
-//   std::list<size_t>::iterator it_std_2 = test_std.insert(it_std, 234234);
+  s21::list<size_t>::iterator it_s21_2 = test.insert(it_s21, 234234);
+  std::list<size_t>::iterator it_std_2 = test_std.insert(it_std, 234234);
 
-//   EXPECT_DOUBLE_EQ(234234, *(++test.begin()));
-//   EXPECT_DOUBLE_EQ(*(++test_std.begin()), *(++test.begin()));
-//   EXPECT_EQ(2, test.size());
+  EXPECT_DOUBLE_EQ(25, *(++test.begin()));
+  EXPECT_DOUBLE_EQ(*(++test_std.begin()), *(++test.begin()));
+  EXPECT_EQ(2, test.size());
 
-//   EXPECT_DOUBLE_EQ(234234, *it_s21_2);
-//   EXPECT_DOUBLE_EQ(*it_s21_2, *it_std_2);
-// }
+  EXPECT_DOUBLE_EQ(234234, *it_s21_2);
+  EXPECT_DOUBLE_EQ(*it_s21_2, *it_std_2);
+}
 
 TEST(test_list, push_back) {
   s21::list<double> test;
