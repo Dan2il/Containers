@@ -1,17 +1,32 @@
-#ifndef DQUEUE_H_
-#define DQUEUE_H_
-#include "../s21_containers.h"
+#ifndef QUEUE_H
+#define QUEUE_H
+
+template <typename T>
+struct Node {
+    T data;
+    Node<T>* next;
+};
 
 template <typename T>
 class Queue {
- public:
-  class iterator;
-  friend class iterator;
+public:
+    Queue();
+    ~Queue();
 
- private:
-  class node;
-  friend class node;
-  class node {};
+    void enqueue(const T& item);
+    void dequeue();
+    bool isEmpty();
+    int size();
+    T& front();
+    const T& front() const;
+    T& back();
+    const T& back() const;
+    void clear();
+
+private:
+    Node<T>* front;
+    Node<T>* rear;
+    int count;
 };
 
-#endif
+#endif // QUEUE_H
