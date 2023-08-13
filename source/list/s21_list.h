@@ -343,20 +343,33 @@ template <typename Type>
 void s21::list<Type>::merge(list& other) {
   if (*this != other && other.stored_) {
     if (!end_node_ || !stored_) {
-      *this = std::move(other);
-      other.end_node_ = CreateNode();
+      splice(begin(), other);
     } else {
       for (s21::list<Type>::iterator it_this = begin(); it_this != end();
            ++it_this) {
         if (*other.begin() < *it_this) {
-          insert(it_this, *other.begin());
-          other.pop_front();
+          Node<Type>* other_link = other.end_node_->next_node->next_node;
+
+          LinkPointerNode(it_this.link_node_->previous_node, it_this.link_node_,
+                          other.end_node_->next_node,
+                          other.end_node_->next_node);
+
+          stored_++;
+
+          other.end_node_->next_node = other_link;
+          other_link->previous_node = end_node_;
+          other.stored_--;
 
           it_this = begin();
         }
         if (!other.stored_) {
+          other.end_node_->next_node = nullptr;
+          other.end_node_->previous_node = nullptr;
           break;
         }
+      }
+      if (other.stored_) {
+        splice(end(), other);
       }
     }
   }
