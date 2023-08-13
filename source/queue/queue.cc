@@ -1,5 +1,4 @@
 #include "queue.h"
-#include <iostream>
 
 template <typename T>
 Queue<T>::Queue() : front(nullptr), rear(nullptr), count(0) {}
