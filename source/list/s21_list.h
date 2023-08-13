@@ -84,7 +84,7 @@ class list {
   void pop_front();
   void pop_back();
 
-  // void swap(list& other);
+  void swap(list& other);
   // void merge(list& other);
   // void splice(const_iterator pos, list& other);
   // void reverse();
@@ -215,9 +215,10 @@ const Type& s21::list<Type>::back() const {
 
 template <typename Type>
 void s21::list<Type>::clear() {
-  if (stored_ && end_node_) {
-    pop_front();
-    clear();
+  if (end_node_) {
+    while (stored_) {
+      pop_front();
+    }
   }
 }
 
@@ -328,6 +329,12 @@ void s21::list<Type>::pop_back() {
     }
     --stored_;
   }
+}
+
+template <typename Type>
+void s21::list<Type>::swap(list& other) {
+  std::swap(end_node_, other.end_node_);
+  std::swap(stored_, other.stored_);
 }
 
 template <typename Type>
