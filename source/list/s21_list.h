@@ -224,16 +224,27 @@ void s21::list<Type>::clear() {
 template <typename Type>
 typename s21::list<Type>::iterator s21::list<Type>::insert(iterator pos,
                                                            const Type& value) {
+  // if (pos.link_list_ != this) {
+  //   throw std::invalid_argument("Incorrect list");
+  // }
   Node<Type>* new_node = CreateNode(value);
-  Node<Type>* pos_node = pos.link_node_;
-  Node<Type>* next_pos_node = pos_node->next_node;
 
-  new_node->next_node = next_pos_node;
-  new_node->previous_node = pos_node;
+  if (!stored_) {
+    end_node_->next_node = new_node;
+    new_node->next_node = end_node_;
 
-  pos_node->next_node = new_node;
-  next_pos_node->previous_node = new_node;
+    end_node_->previous_node = new_node;
+    new_node->previous_node = end_node_;
+  } else {
+    Node<Type>* pos_node = pos.link_node_;
+    Node<Type>* prev_node = pos_node->previous_node;
 
+    prev_node->next_node = new_node;
+    new_node->next_node = pos_node;
+
+    pos_node->previous_node = new_node;
+    new_node->previous_node = prev_node;
+  }
   ++stored_;
   return iterator(this, new_node);
 }
