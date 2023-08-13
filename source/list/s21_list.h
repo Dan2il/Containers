@@ -46,6 +46,8 @@ class list {
   typedef list_iterator iterator;
   typedef const list_iterator const_iterator;
 
+  using pointer_node = Node<Type>*;
+
   list();
   explicit list(size_t count);
   list(const size_t count, const Type& value);
@@ -110,7 +112,9 @@ class list {
 
   void FreeNode(Node<Type>* node);
 
-  void LinkPointer(Node<Type>* for_link_next, Node<Type>* for_link_previous);
+  void LinkPointerNode(pointer_node prev_pos, pointer_node pos,
+                       pointer_node first, pointer_node last);
+  // void LinkPointer(Node<Type>* for_link_next, Node<Type>* for_link_previous);
 };
 
 template <typename Type>
@@ -365,29 +369,13 @@ void s21::list<Type>::splice(const_iterator pos, list& other) {
       throw std::invalid_argument("Node is nullptr");
     }
     if (!stored_) {
-      Node<Type>* first_node_other = other.end_node_->next_node;
-      Node<Type>* last_node_other = other.end_node_->previous_node;
-
-      end_node_->next_node = first_node_other;
-      last_node_other->next_node = end_node_;
-
-      end_node_->previous_node = other.end_node_->previous_node;
-      first_node_other->previous_node = end_node_;
-
+      LinkPointerNode(end_node_, end_node_, other.end_node_->next_node,
+                      other.end_node_->previous_node);
     } else {
-      Node<Type>* pos_node = pos.link_node_;
-      Node<Type>* prev_node = pos_node->previous_node;
-
-      Node<Type>* first_node_other = other.end_node_->next_node;
-      Node<Type>* last_node_other = other.end_node_->previous_node;
-
-      prev_node->next_node = first_node_other;
-      last_node_other->next_node = pos_node;
-
-      pos_node->previous_node = last_node_other;
-      first_node_other->previous_node = prev_node;
+      LinkPointerNode(pos.link_node_->previous_node, pos.link_node_,
+                      other.end_node_->next_node,
+                      other.end_node_->previous_node);
     }
-
     stored_ += other.stored_;
 
     other.end_node_->next_node = nullptr;
@@ -468,10 +456,13 @@ void s21::list<Type>::FreeNode(Node<Type>* node) {
 }
 
 template <typename Type>
-void s21::list<Type>::LinkPointer(Node<Type>* for_link_next,
-                                  Node<Type>* for_link_previous) {
-  for_link_next->next_node = for_link_previous;
-  for_link_previous->previous_node = for_link_next;
+void s21::list<Type>::LinkPointerNode(pointer_node prev_pos, pointer_node pos,
+                                      pointer_node first, pointer_node last) {
+  prev_pos->next_node = first;
+  last->next_node = pos;
+
+  pos->previous_node = last;
+  first->previous_node = prev_pos;
 }
 
 // Iterators
