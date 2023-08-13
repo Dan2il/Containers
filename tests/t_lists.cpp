@@ -814,10 +814,250 @@ TEST(test_list, merge) {
 
     list1.merge(list2);
 
-    for (auto t : list1) {
-      std::cout << "t == " << t << std::endl;
-    }
-
     EXPECT_EQ(s21::list<int>({1, 2, 3, 3, 3, 4, 4, 5, 7, 8, 9}), list1);
+  }
+}
+
+TEST(test_list, splice) {
+  {
+    s21::list<int> list1 = {1, 2, 3, 4, 5, 6};
+    s21::list<int> list2 = {10, 20, 30, 40, 50, 60};
+
+    list1.splice(list1.begin(), list2);
+
+    std::list<int> list1_std = {1, 2, 3, 4, 5, 6};
+    std::list<int> list2_std = {10, 20, 30, 40, 50, 60};
+
+    list1_std.splice(list1_std.begin(), list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+    EXPECT_EQ(12, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+
+    EXPECT_EQ(0, list2.size());
+    EXPECT_EQ(list2_std.size(), list2.size());
+
+    EXPECT_EQ(10, list1.front());
+    EXPECT_EQ(list1_std.front(), list1.front());
+
+    EXPECT_EQ(6, list1.back());
+    EXPECT_EQ(list1_std.back(), list1.back());
+  }
+
+  {
+    s21::list<int> list1 = {1, 2, 3, 4, 5, 6};
+    s21::list<int> list2 = {10, 20, 30, 40, 50, 60};
+
+    list1.splice(list1.end(), list2);
+
+    std::list<int> list1_std = {1, 2, 3, 4, 5, 6};
+    std::list<int> list2_std = {10, 20, 30, 40, 50, 60};
+
+    list1_std.splice(list1_std.end(), list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+    EXPECT_EQ(12, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+
+    EXPECT_EQ(0, list2.size());
+    EXPECT_EQ(list2_std.size(), list2.size());
+
+    EXPECT_EQ(1, list1.front());
+    EXPECT_EQ(list1_std.front(), list1.front());
+
+    EXPECT_EQ(60, list1.back());
+    EXPECT_EQ(list1_std.back(), list1.back());
+  }
+
+  {
+    s21::list<int> list1;
+    s21::list<int> list2 = {10, 20, 30, 40, 50, 60};
+
+    list1.splice(list1.begin(), list2);
+
+    std::list<int> list1_std;
+    std::list<int> list2_std = {10, 20, 30, 40, 50, 60};
+
+    list1_std.splice(list1_std.begin(), list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+    EXPECT_EQ(6, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+
+    EXPECT_EQ(0, list2.size());
+    EXPECT_EQ(list2_std.size(), list2.size());
+
+    EXPECT_EQ(10, list1.front());
+    EXPECT_EQ(list1_std.front(), list1.front());
+
+    EXPECT_EQ(60, list1.back());
+    EXPECT_EQ(list1_std.back(), list1.back());
+  }
+
+  {
+    s21::list<int> list1;
+    s21::list<int> list2 = {10, 20, 30, 40, 50, 60};
+
+    list1.splice(list1.end(), list2);
+
+    std::list<int> list1_std;
+    std::list<int> list2_std = {10, 20, 30, 40, 50, 60};
+
+    list1_std.splice(list1_std.end(), list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+    EXPECT_EQ(6, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+
+    EXPECT_EQ(0, list2.size());
+    EXPECT_EQ(list2_std.size(), list2.size());
+
+    EXPECT_EQ(10, list1.front());
+    EXPECT_EQ(list1_std.front(), list1.front());
+
+    EXPECT_EQ(60, list1.back());
+    EXPECT_EQ(list1_std.back(), list1.back());
+  }
+
+  {
+    s21::list<int> list1 = {1, 2, 3, 4, 5, 6};
+    s21::list<int> list2;
+
+    list1.splice(list1.begin(), list2);
+
+    std::list<int> list1_std = {1, 2, 3, 4, 5, 6};
+    std::list<int> list2_std;
+
+    list1_std.splice(list1_std.begin(), list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+    EXPECT_EQ(6, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+
+    EXPECT_EQ(0, list2.size());
+    EXPECT_EQ(list2_std.size(), list2.size());
+
+    EXPECT_EQ(1, list1.front());
+    EXPECT_EQ(list1_std.front(), list1.front());
+
+    EXPECT_EQ(6, list1.back());
+    EXPECT_EQ(list1_std.back(), list1.back());
+  }
+
+  {
+    s21::list<int> list1 = {1, 2, 3, 4, 5, 6};
+    s21::list<int> list2;
+
+    list1.splice(list1.end(), list2);
+
+    std::list<int> list1_std = {1, 2, 3, 4, 5, 6};
+    std::list<int> list2_std;
+
+    list1_std.splice(list1_std.end(), list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+    EXPECT_EQ(6, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+
+    EXPECT_EQ(0, list2.size());
+    EXPECT_EQ(list2_std.size(), list2.size());
+
+    EXPECT_EQ(1, list1.front());
+    EXPECT_EQ(list1_std.front(), list1.front());
+
+    EXPECT_EQ(6, list1.back());
+    EXPECT_EQ(list1_std.back(), list1.back());
+  }
+  {
+    s21::list<int> list1 = {1};
+    s21::list<int> list2 = {10, 20, 30, 40, 50, 60};
+
+    list1.splice(list1.begin(), list2);
+
+    std::list<int> list1_std = {1};
+    std::list<int> list2_std = {10, 20, 30, 40, 50, 60};
+
+    list1_std.splice(list1_std.begin(), list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+  }
+  {
+    s21::list<int> list1 = {1, 2, 3, 4, 5, 6};
+    s21::list<int> list2 = {10};
+
+    list1.splice(list1.begin(), list2);
+
+    std::list<int> list1_std = {1, 2, 3, 4, 5, 6};
+    std::list<int> list2_std = {10};
+
+    list1_std.splice(list1_std.begin(), list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+  }
+  {
+    s21::list<int> list1 = {1};
+    s21::list<int> list2 = {10, 20, 30, 40, 50, 60};
+
+    list1.splice(list1.end(), list2);
+
+    std::list<int> list1_std = {1};
+    std::list<int> list2_std = {10, 20, 30, 40, 50, 60};
+
+    list1_std.splice(list1_std.end(), list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+  }
+  {
+    s21::list<int> list1 = {1, 2, 3, 4, 5, 6};
+    s21::list<int> list2 = {10};
+
+    list1.splice(list1.end(), list2);
+
+    std::list<int> list1_std = {1, 2, 3, 4, 5, 6};
+    std::list<int> list2_std = {10};
+
+    list1_std.splice(list1_std.end(), list2_std);
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
   }
 }
