@@ -87,7 +87,7 @@ class list {
 
   void swap(list& other);
   void merge(list& other);
-  // void splice(const_iterator pos, list& other);
+  void splice(const_iterator pos, list& other);
   // void reverse();
   // void unique();
   // void sort();
@@ -337,25 +337,63 @@ void s21::list<Type>::swap(list& other) {
 
 template <typename Type>
 void s21::list<Type>::merge(list& other) {
-  // if (this != other && other.stored_) {
-  if (!end_node_ || !stored_) {
-    *this = std::move(other);
-    other.end_node_ = CreateNode();
-  } else {
-    for (s21::list<Type>::iterator it_this = begin(); it_this != end();
-         ++it_this) {
-      if (*other.begin() < *it_this) {
-        insert(it_this, *other.begin());
-        other.pop_front();
+  if (*this != other && other.stored_) {
+    if (!end_node_ || !stored_) {
+      *this = std::move(other);
+      other.end_node_ = CreateNode();
+    } else {
+      for (s21::list<Type>::iterator it_this = begin(); it_this != end();
+           ++it_this) {
+        if (*other.begin() < *it_this) {
+          insert(it_this, *other.begin());
+          other.pop_front();
 
-        it_this = begin();
-      }
-      if (!other.stored_) {
-        break;
+          it_this = begin();
+        }
+        if (!other.stored_) {
+          break;
+        }
       }
     }
   }
-  // }
+}
+
+template <typename Type>
+void s21::list<Type>::splice(const_iterator pos, list& other) {
+  if (*this != other && other.stored_) {
+    if (!end_node_) {
+      throw std::invalid_argument("Node is nullptr");
+    }
+    if (!stored_) {
+      Node<Type>* first_node_other = other.end_node_->next_node;
+      Node<Type>* last_node_other = other.end_node_->previous_node;
+
+      end_node_->next_node = first_node_other;
+      last_node_other->next_node = end_node_;
+
+      end_node_->previous_node = other.end_node_->previous_node;
+      first_node_other->previous_node = end_node_;
+
+    } else {
+      Node<Type>* pos_node = pos.link_node_;
+      Node<Type>* prev_node = pos_node->previous_node;
+
+      Node<Type>* first_node_other = other.end_node_->next_node;
+      Node<Type>* last_node_other = other.end_node_->previous_node;
+
+      prev_node->next_node = first_node_other;
+      last_node_other->next_node = pos_node;
+
+      pos_node->previous_node = last_node_other;
+      first_node_other->previous_node = prev_node;
+    }
+
+    stored_ += other.stored_;
+
+    other.end_node_->next_node = nullptr;
+    other.end_node_->previous_node = nullptr;
+    other.stored_ = 0;
+  }
 }
 
 template <typename Type>
