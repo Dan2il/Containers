@@ -806,3 +806,18 @@ TEST(test_list, swap) {
     EXPECT_DOUBLE_EQ(56.6542, test_2.back());
   }
 }
+
+TEST(test_list, merge) {
+  {
+    s21::list<int> list1 = {1, 3, 3, 5, 9};
+    s21::list<int> list2 = {2, 3, 4, 4, 7, 8};
+
+    list1.merge(list2);
+
+    for (auto t : list1) {
+      std::cout << "t == " << t << std::endl;
+    }
+
+    EXPECT_EQ(s21::list<int>({1, 2, 3, 3, 3, 4, 4, 5, 7, 8, 9}), list1);
+  }
+}
