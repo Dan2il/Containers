@@ -1,5 +1,6 @@
 #include "queue.h"
 
+// возможно стоит инициализировать что-то типо нулноды, для упрощения добавления элементов и получения front() и back() при пустом контейнере
 template <typename T>
 Queue<T>::Queue() : front(nullptr), rear(nullptr), count(0) {}
 
@@ -27,6 +28,7 @@ void Queue<T>::enqueue(const T& item) {
 template <typename T>
 void Queue<T>::dequeue() {
     if (isEmpty()) {
+        // это для отладки? или как вывод ошибки?
         std::cout << "Queue is empty" << std::endl;
     } else {
         Node<T>* temp = front;
@@ -55,6 +57,7 @@ template <typename T>
 T& Queue<T>::front() {
     if (isEmpty()) {
         std::cout << "Queue is empty" << std::endl;
+        // идея класс
         static T defaultValue;
         return defaultValue;
     } else {
