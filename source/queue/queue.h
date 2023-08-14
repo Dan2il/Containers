@@ -24,6 +24,7 @@ public:
     void clear();
 
 private:
+    // по гугл стилю в конце приватных полей ствят _, типа: front_
     Node<T>* front;
     Node<T>* rear;
     int count;
