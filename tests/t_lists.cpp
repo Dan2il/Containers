@@ -1170,3 +1170,14 @@ TEST(test_list, splice) {
     }
   }
 }
+
+TEST(test_list, reverse) {
+  s21::list<int> t1{1, 2, 3, 4, 5};
+  t1.reverse();
+
+  for (auto t : t1) {
+    std::cout << "t == " << t << std::endl;
+  }
+
+  EXPECT_EQ(s21::list<int>({5, 4, 3, 2, 1}), t1);
+}
