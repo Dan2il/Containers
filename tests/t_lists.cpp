@@ -1309,3 +1309,110 @@ TEST(test_list, reverse) {
     EXPECT_EQ(s21::list<int>({3}), list1);
   }
 }
+
+TEST(test_list, unique) {
+  {
+    s21::list<double> list1({1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 4, 4,
+                             4, 4, 4, 5, 6, 7, 8, 8, 8, 8, 8, 8});
+
+    std::list<double> list1_std({1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 4, 4,
+                                 4, 4, 4, 5, 6, 7, 8, 8, 8, 8, 8, 8});
+
+    list1.unique();
+    list1_std.unique();
+
+    std::list<double>::iterator it_std = list1_std.begin();
+    for (double t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+  }
+  {
+    s21::list<double> list1(
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1});
+
+    std::list<double> list1_std(
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1});
+
+    list1.unique();
+    list1_std.unique();
+
+    std::list<double>::iterator it_std = list1_std.begin();
+    for (double t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+  }
+  {
+    s21::list<double> list1({55.555555, 55.555555});
+
+    std::list<double> list1_std({55.555555, 55.555555});
+
+    list1.unique();
+    list1_std.unique();
+
+    std::list<double>::iterator it_std = list1_std.begin();
+    for (double t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+  }
+  {
+    s21::list<double> list1({55.555555});
+
+    std::list<double> list1_std({55.555555});
+
+    list1.unique();
+    list1_std.unique();
+
+    std::list<double>::iterator it_std = list1_std.begin();
+    for (double t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+  }
+  {
+    s21::list<double> list1;
+
+    std::list<double> list1_std;
+
+    list1.unique();
+    list1_std.unique();
+
+    std::list<double>::iterator it_std = list1_std.begin();
+    for (double t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+  }
+  {
+    s21::list<double> list1(
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0});
+
+    std::list<double> list1_std(
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0});
+
+    list1.unique();
+    list1_std.unique();
+
+    std::list<double>::iterator it_std = list1_std.begin();
+    for (double t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+  }
+  {
+    s21::list<double> list1({1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 10, 10});
+
+    std::list<double> list1_std({1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 10, 10});
+
+    list1.unique();
+    list1_std.unique();
+
+    std::list<double>::iterator it_std = list1_std.begin();
+    for (double t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+  }
+}
