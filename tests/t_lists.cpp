@@ -636,6 +636,61 @@ TEST(test_list, push_back) {
   EXPECT_DOUBLE_EQ(test_std.back(), test.back());
 }
 
+TEST(test_list, push_front) {
+  s21::list<double> test;
+  std::list<double> test_std;
+
+  EXPECT_EQ(0, test.size());
+  EXPECT_TRUE(test.empty());
+  EXPECT_EQ(test_std.empty(), test.empty());
+
+  test.push_front(25);
+  test_std.push_front(25);
+
+  EXPECT_EQ(1, test.size());
+  EXPECT_FALSE(test.empty());
+  EXPECT_EQ(test_std.empty(), test.empty());
+
+  EXPECT_DOUBLE_EQ(25, test.front());
+  EXPECT_DOUBLE_EQ(25, test.back());
+
+  test.push_front(25.255);
+  test_std.push_front(25.255);
+
+  EXPECT_EQ(2, test.size());
+  EXPECT_DOUBLE_EQ(25.255, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_DOUBLE_EQ(25, test.back());
+  EXPECT_DOUBLE_EQ(test_std.back(), test.back());
+
+  test.push_front(0.009);
+  test_std.push_front(0.009);
+
+  EXPECT_EQ(3, test.size());
+  EXPECT_DOUBLE_EQ(0.009, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_DOUBLE_EQ(25, test.back());
+  EXPECT_DOUBLE_EQ(test_std.back(), test.back());
+
+  test.push_front(234687342);
+  test_std.push_front(234687342);
+
+  EXPECT_EQ(4, test.size());
+  EXPECT_DOUBLE_EQ(234687342, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_DOUBLE_EQ(25, test.back());
+  EXPECT_DOUBLE_EQ(test_std.back(), test.back());
+
+  test.push_front(976986679867986);
+  test_std.push_front(976986679867986);
+
+  EXPECT_EQ(5, test.size());
+  EXPECT_DOUBLE_EQ(976986679867986, test.front());
+  EXPECT_DOUBLE_EQ(test_std.front(), test.front());
+  EXPECT_DOUBLE_EQ(25, test.back());
+  EXPECT_DOUBLE_EQ(test_std.back(), test.back());
+}
+
 TEST(test_list, pop_front) {
   s21::list<double> test{1, 23, 53223, 543, 134234, 54, 56.6542};
   std::list<double> test_std{1, 23, 53223, 543, 134234, 54, 56.6542};
