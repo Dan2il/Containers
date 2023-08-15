@@ -91,7 +91,7 @@ class list {
   void merge(list& other);
   void splice(const_iterator pos, list& other);
   void reverse();
-  // void unique();
+  void unique();
   // void sort();
 
   // Operators
@@ -114,7 +114,7 @@ class list {
 
   void LinkPointerNodeRange(pointer_node prev_pos, pointer_node pos,
                             pointer_node first, pointer_node last);
-  // void LinkPointer(Node<Type>* for_link_next, Node<Type>* for_link_previous);
+  void LinkPointerNode(Node<Type>* prev_node, Node<Type>* next_node);
 };
 
 template <typename Type>
@@ -227,26 +227,17 @@ void s21::list<Type>::clear() {
 template <typename Type>
 typename s21::list<Type>::iterator s21::list<Type>::insert(iterator pos,
                                                            const Type& value) {
-  // if (pos.link_list_ != this) {
-  //   throw std::invalid_argument("Incorrect list");
-  // }
+  if (pos.link_list_ != this) {
+    throw std::invalid_argument("Incorrect list");
+  }
   Node<Type>* new_node = CreateNode(value);
 
   if (!stored_) {
-    end_node_->next_node = new_node;
-    new_node->next_node = end_node_;
-
-    end_node_->previous_node = new_node;
-    new_node->previous_node = end_node_;
+    LinkPointerNode(end_node_, new_node);
+    LinkPointerNode(new_node, end_node_);
   } else {
-    Node<Type>* pos_node = pos.link_node_;
-    Node<Type>* prev_node = pos_node->previous_node;
-
-    prev_node->next_node = new_node;
-    new_node->next_node = pos_node;
-
-    pos_node->previous_node = new_node;
-    new_node->previous_node = prev_node;
+    LinkPointerNode(pos.link_node_->previous_node, new_node);
+    LinkPointerNode(new_node, pos.link_node_);
   }
   ++stored_;
   return iterator(this, new_node);
@@ -256,19 +247,11 @@ template <typename Type>
 void s21::list<Type>::push_back(const Type& value) {
   Node<Type>* push = CreateNode(value);
   if (!stored_) {
-    end_node_->previous_node = push;
-    end_node_->next_node = push;
-
-    push->next_node = end_node_;
-    push->previous_node = end_node_;
+    LinkPointerNode(end_node_, push);
+    LinkPointerNode(push, end_node_);
   } else {
-    Node<Type>* prev_end = end_node_->previous_node;
-
-    prev_end->next_node = push;
-    push->next_node = end_node_;
-
-    end_node_->previous_node = push;
-    push->previous_node = prev_end;
+    LinkPointerNode(end_node_->previous_node, push);
+    LinkPointerNode(push, end_node_);
   }
   ++stored_;
 }
@@ -277,38 +260,26 @@ template <typename Type>
 void s21::list<Type>::push_front(const Type& value) {
   Node<Type>* push = CreateNode(value);
   if (!stored_) {
-    end_node_->next_node = push;
-    end_node_->previous_node = push;
-
-    push->previous_node = end_node_;
-    push->next_node = end_node_;
+    LinkPointerNode(end_node_, push);
+    LinkPointerNode(push, end_node_);
   } else {
-    Node<Type>* buf_first_node = end_node_->next_node;
-
-    push->next_node = buf_first_node;
-    push->previous_node = end_node_;
-
-    buf_first_node->previous_node = push;
-    end_node_->next_node = push;
+    LinkPointerNode(push, end_node_->next_node);
+    LinkPointerNode(end_node_, push);
   }
+  ++stored_;
 }
 
 template <typename Type>
 void s21::list<Type>::pop_front() {
   if (end_node_ && stored_) {
+    Node<Type>* del_node = end_node_->next_node;
     if (stored_ > 1) {
-      Node<Type>* del_node = end_node_->next_node;
-      Node<Type>* buf_next_node = del_node->next_node;
-
-      end_node_->next_node = buf_next_node;
-      buf_next_node->previous_node = end_node_;
-
-      FreeNode(del_node);
+      LinkPointerNode(end_node_, del_node->next_node);
     } else {
-      FreeNode(end_node_->next_node);
       end_node_->next_node = nullptr;
       end_node_->previous_node = nullptr;
     }
+    FreeNode(del_node);
     --stored_;
   }
 }
@@ -316,19 +287,14 @@ void s21::list<Type>::pop_front() {
 template <typename Type>
 void s21::list<Type>::pop_back() {
   if (end_node_ && stored_) {
+    Node<Type>* del_node = end_node_->previous_node;
     if (stored_ > 1) {
-      Node<Type>* del_node = end_node_->previous_node;
-      Node<Type>* prev_node = del_node->previous_node;
-
-      end_node_->previous_node = prev_node;
-      prev_node->next_node = end_node_;
-
-      FreeNode(del_node);
+      LinkPointerNode(del_node->previous_node, end_node_);
     } else {
-      FreeNode(end_node_->next_node);
       end_node_->next_node = nullptr;
       end_node_->previous_node = nullptr;
     }
+    FreeNode(del_node);
     --stored_;
   }
 }
@@ -355,9 +321,8 @@ void s21::list<Type>::merge(list& other) {
                                other.end_node_->next_node);
 
           stored_++;
-
           other.end_node_->next_node = other_link;
-          other_link->previous_node = end_node_;
+          other_link->previous_node = other.end_node_;
           other.stored_--;
 
           it_this = begin();
@@ -372,27 +337,6 @@ void s21::list<Type>::merge(list& other) {
         splice(end(), other);
       }
     }
-  }
-}
-
-template <typename Type>
-void s21::list<Type>::reverse() {
-  if (stored_ > 1) {
-    Node<Type>* next_node_end = end_node_->next_node;
-    Node<Type>* prev_node_end = end_node_->previous_node;
-
-    for (Node<Type>* step = end_node_->next_node; step != end_node_;) {
-      Node<Type>* next_node = step->next_node;
-      Node<Type>* prev_node = step->previous_node;
-
-      step->next_node = prev_node;
-      step->previous_node = next_node;
-
-      step = next_node;
-    }
-
-    end_node_->next_node = prev_node_end;
-    end_node_->previous_node = next_node_end;
   }
 }
 
@@ -419,6 +363,27 @@ void s21::list<Type>::splice(const_iterator pos, list& other) {
 }
 
 template <typename Type>
+void s21::list<Type>::reverse() {
+  if (stored_ > 1) {
+    Node<Type>* next_node_end = end_node_->next_node;
+    Node<Type>* prev_node_end = end_node_->previous_node;
+    for (Node<Type>* step = end_node_->next_node; step != end_node_;) {
+      Node<Type>* next_node = step->next_node;
+      step->next_node = step->previous_node;
+      step->previous_node = next_node;
+      step = next_node;
+    }
+    end_node_->next_node = prev_node_end;
+    end_node_->previous_node = next_node_end;
+  }
+}
+
+template <typename Type>
+void s21::list<Type>::unique() {
+  //
+}
+
+template <typename Type>
 list<Type>& s21::list<Type>::operator=(list&& other) noexcept {
   if (*this != other) {
     if (end_node_) {
@@ -430,6 +395,7 @@ list<Type>& s21::list<Type>::operator=(list&& other) noexcept {
   return *this;
 }
 
+// добавить проверку где не равны только последние элементы
 template <typename Type>
 bool s21::list<Type>::operator==(const list& other) const {
   if ((stored_ != other.stored_) || (!end_node_ && other.end_node_) ||
@@ -438,10 +404,9 @@ bool s21::list<Type>::operator==(const list& other) const {
   }
   s21::list<Type>::iterator it_other = other.begin();
   for (const Type& data : *this) {
-    if (data != *it_other) {
+    if (data != *(it_other++)) {
       return false;
     }
-    ++it_other;
   }
   return true;
 }
@@ -498,6 +463,13 @@ void s21::list<Type>::LinkPointerNodeRange(pointer_node prev_pos,
 
   pos->previous_node = last;
   first->previous_node = prev_pos;
+}
+
+template <typename Type>
+void s21::list<Type>::LinkPointerNode(Node<Type>* prev_node,
+                                      Node<Type>* next_node) {
+  prev_node->next_node = next_node;
+  next_node->previous_node = prev_node;
 }
 
 // Iterators
