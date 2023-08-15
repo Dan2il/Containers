@@ -1172,12 +1172,85 @@ TEST(test_list, splice) {
 }
 
 TEST(test_list, reverse) {
-  s21::list<int> t1{1, 2, 3, 4, 5};
-  t1.reverse();
+  {
+    s21::list<int> list1 = {1, 3, 234234, 5, 9};
 
-  for (auto t : t1) {
-    std::cout << "t == " << t << std::endl;
+    list1.reverse();
+
+    std::list<int> list1_std = {1, 3, 234234, 5, 9};
+
+    list1_std.reverse();
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+
+    EXPECT_EQ(5, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+    EXPECT_EQ(s21::list<int>({9, 5, 234234, 3, 1}), list1);
   }
 
-  EXPECT_EQ(s21::list<int>({5, 4, 3, 2, 1}), t1);
+  {
+    s21::list<int> list1 = {1, 3, 234234, 5, 9, 3, 234234, 5, 9, 3, 234234, 5,
+                            9, 3, 234234, 5, 9, 3, 234234, 5, 9, 3, 234234, 5,
+                            9, 3, 234234, 5, 9};
+
+    list1.reverse();
+
+    std::list<int> list1_std = {
+        1, 3, 234234, 5, 9, 3, 234234, 5, 9, 3, 234234, 5, 9, 3, 234234, 5,
+        9, 3, 234234, 5, 9, 3, 234234, 5, 9, 3, 234234, 5, 9};
+
+    list1_std.reverse();
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+
+    EXPECT_EQ(29, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+  }
+  {
+    s21::list<int> list1;
+
+    list1.reverse();
+
+    std::list<int> list1_std;
+
+    list1_std.reverse();
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+
+    EXPECT_EQ(0, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+    EXPECT_EQ(s21::list<int>({}), list1);
+  }
+
+  {
+    s21::list<int> list1 = {3};
+
+    list1.reverse();
+
+    std::list<int> list1_std = {3};
+
+    list1_std.reverse();
+
+    std::list<int>::iterator it_std = list1_std.begin();
+    for (int t : list1) {
+      EXPECT_EQ(*it_std, t);
+      ++it_std;
+    }
+
+    EXPECT_EQ(1, list1.size());
+    EXPECT_EQ(list1_std.size(), list1.size());
+    EXPECT_EQ(s21::list<int>({3}), list1);
+  }
 }
