@@ -92,7 +92,7 @@ class list {
   void splice(const_iterator pos, list& other);
   void reverse();
   void unique();
-  // void sort();
+  void sort();
 
   // Operators
 
@@ -115,6 +115,10 @@ class list {
   void LinkPointerNodeRange(pointer_node prev_pos, pointer_node pos,
                             pointer_node first, pointer_node last);
   void LinkPointerNode(Node<Type>* prev_node, Node<Type>* next_node);
+
+  Node<Type>* CreateTree();
+  void PushNodeTree(Node<Type>* push, Node<Type>* head);
+  void GetDataTree(Node<Type>* head);
 };
 
 template <typename Type>
@@ -396,6 +400,82 @@ void s21::list<Type>::unique() {
 }
 
 template <typename Type>
+void s21::list<Type>::sort() {
+  if (stored_ > 1) {
+    Node<Type>* head = CreateTree();
+    GetDataTree(head);
+  }
+  end_node_->next_node = nullptr;
+  end_node_->previous_node = nullptr;
+  stored_ = 0;
+}
+
+template <typename Type>
+Node<Type>* s21::list<Type>::CreateTree() {
+  Node<Type>* head = end_node_->next_node;
+
+  for (Node<Type>* step = head; step != end_node_;) {
+    Node<Type>* push = step;
+    step = step->next_node;
+
+    push->next_node = nullptr;
+    push->previous_node = nullptr;
+
+    PushNodeTree(push, head);
+    if (step->next_node == end_node_) {
+      break;
+    }
+  }
+  return head;
+}
+
+template <typename Type>
+void s21::list<Type>::PushNodeTree(Node<Type>* push, Node<Type>* head) {
+  if (push->data < head->data) {
+    if (head->next_node != nullptr) {
+      PushNodeTree(push, head->next_node);
+    } else {
+      head->next_node = push;
+    }
+  } else {
+    if (head->previous_node != nullptr) {
+      PushNodeTree(push, head->previous_node);
+    } else {
+      head->previous_node = push;
+    }
+  }
+}
+
+template <typename Type>
+void s21::list<Type>::GetDataTree(Node<Type>* head) {
+  assert(head != nullptr);
+  if (head->next_node != nullptr) {
+    // GetDataTree(head->next_node);
+  }
+  std::cout << head->data << std::endl;
+  // Node<Type>* link = head;
+  // if (!end_node_->previous_node) {
+  //   end_node_->next_node = link;
+  //   link->next_node = end_node_;
+
+  //   end_node_->previous_node = link;
+  //   link->previous_node = end_node_;
+  // } else {
+  //   Node<Type>* buf_prev_end = end_node_->previous_node;
+
+  //   buf_prev_end->next_node = link;
+  //   link->next_node = end_node_;
+
+  //   end_node_->previous_node = link;
+  //   link->previous_node = buf_prev_end;
+  // }
+
+  if (head->previous_node != nullptr) {
+    // GetDataTree(head->previous_node);
+  }
+}
+
+template <typename Type>
 list<Type>& s21::list<Type>::operator=(list&& other) noexcept {
   if (*this != other) {
     if (end_node_) {
@@ -432,11 +512,13 @@ template <typename Type>
 void s21::list<Type>::DeleteList() {
   if (end_node_) {
     Node<Type>* end = end_node_;
-    for (Node<Type>* node = end_node_->next_node;
-         node != nullptr && node != end;) {
-      Node<Type>* dealloc = node;
-      node = node->next_node;
-      FreeNode(dealloc);
+    if (end_node_->next_node) {
+      for (Node<Type>* node = end_node_->next_node;
+           node != nullptr && node != end;) {
+        Node<Type>* dealloc = node;
+        node = node->next_node;
+        FreeNode(dealloc);
+      }
     }
     if (end) {
       FreeNode(end);
