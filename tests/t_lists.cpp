@@ -1414,5 +1414,12 @@ TEST(test_list, unique) {
       EXPECT_EQ(*it_std, t);
       ++it_std;
     }
+    list1_std.sort();
   }
+}
+
+TEST(test_list, sort) {
+  s21::list<int> list1(
+      {9, 8, 7, 254, 6, 5, 4, 3, 2, 1, 0, -1, -2, 65, -3, -4, -5, -6});
+  list1.sort();
 }
