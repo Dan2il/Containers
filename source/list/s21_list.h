@@ -90,7 +90,7 @@ class list {
   void swap(list& other);
   void merge(list& other);
   void splice(const_iterator pos, list& other);
-  // void reverse();
+  void reverse();
   // void unique();
   // void sort();
 
@@ -373,6 +373,27 @@ void s21::list<Type>::merge(list& other) {
       }
     }
   }
+}
+
+template <typename Type>
+void s21::list<Type>::reverse() {
+  Node<Type>* next_node_end = end_node_->next_node;
+  Node<Type>* prev_node_end = end_node_->previous_node;
+
+  Node<Type>* step = end_node_->next_node;
+
+  for (; step != end_node_;) {
+    Node<Type>* next_node = step->next_node;
+    Node<Type>* prev_node = step->previous_node;
+
+    step->next_node = prev_node;
+    step->previous_node = next_node;
+
+    step = next_node;
+  }
+
+  end_node_->next_node = prev_node_end;
+  end_node_->previous_node = next_node_end;
 }
 
 template <typename Type>
