@@ -380,7 +380,19 @@ void s21::list<Type>::reverse() {
 
 template <typename Type>
 void s21::list<Type>::unique() {
-  //
+  if (stored_ > 1) {
+    for (Node<Type>* step = end_node_->next_node;
+         step->next_node != end_node_;) {
+      if (step->data != step->next_node->data) {
+        step = step->next_node;
+      } else {
+        Node<Type>* del_node = step->next_node;
+        LinkPointerNode(step, del_node->next_node);
+        FreeNode(del_node);
+        --stored_;
+      }
+    }
+  }
 }
 
 template <typename Type>
