@@ -1414,12 +1414,27 @@ TEST(test_list, unique) {
       EXPECT_EQ(*it_std, t);
       ++it_std;
     }
-    list1_std.sort();
   }
 }
 
 TEST(test_list, sort) {
-  s21::list<int> list1(
-      {9, 8, 7, 254, 6, 5, 4, 3, 2, 1, 0, -1, -2, 65, -3, -4, -5, -6});
+  s21::list<int> list1({9, 8, 1, 5, 4, 20});
   list1.sort();
+
+  std::list<int> list1_std({9, 8, 1, 5, 4, 20});
+
+  list1_std.sort();
+
+  for (auto t : list1) {
+    std::cout << "t == " << t << std::endl;
+  }
+
+  EXPECT_FALSE(list1.empty());
+  EXPECT_EQ(list1.size(), list1_std.size());
+
+  std::list<int>::iterator it_std = list1_std.begin();
+  for (int t : list1) {
+    EXPECT_EQ(*it_std, t);
+    ++it_std;
+  }
 }
