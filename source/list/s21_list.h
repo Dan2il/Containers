@@ -85,6 +85,9 @@ class list {
 
   iterator insert(iterator pos, const Type& value);
 
+  template <typename... Args>
+  iterator insert_many(const_iterator pos, Args&&... args);
+
   void push_front(const Type& value);
   void push_back(const Type& value);
 
@@ -94,6 +97,7 @@ class list {
   void swap(list& other);
   void merge(list& other);
   void splice(const_iterator pos, list& other);
+  void splice(const_iterator pos, list&& other);
   void reverse();
   void unique();
   void sort();
@@ -262,6 +266,15 @@ typename s21::list<Type>::iterator s21::list<Type>::insert(iterator pos,
 }
 
 template <typename Type>
+template <typename... Args>
+typename s21::list<Type>::iterator s21::list<Type>::insert_many(
+    const_iterator pos, Args&&... args) {
+  pointer_node prev_push = pos.link_node_->previous_node;
+  splice(pos, s21::list<Type>({args...}));
+  return iterator(this, prev_push);
+}
+
+template <typename Type>
 void s21::list<Type>::push_back(const Type& value) {
   pointer_node push = CreateNode(value);
   !stored_
@@ -342,6 +355,24 @@ void s21::list<Type>::merge(list& other) {
 
 template <typename Type>
 void s21::list<Type>::splice(const_iterator pos, list& other) {
+  if (*this != other && other.stored_) {
+    if (!end_node_) {
+      throw std::invalid_argument("Node is nullptr");
+    }
+    !stored_
+        ? LinkPointerNodeRange(end_node_, end_node_, other.end_node_->next_node,
+                               other.end_node_->previous_node)
+        : LinkPointerNodeRange(pos.link_node_->previous_node, pos.link_node_,
+                               other.end_node_->next_node,
+                               other.end_node_->previous_node);
+    stored_ += other.stored_;
+    DelLink(other.end_node_);
+    other.stored_ = 0;
+  }
+}
+
+template <typename Type>
+void s21::list<Type>::splice(const_iterator pos, list&& other) {
   if (*this != other && other.stored_) {
     if (!end_node_) {
       throw std::invalid_argument("Node is nullptr");
