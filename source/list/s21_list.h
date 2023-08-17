@@ -88,6 +88,9 @@ class list {
   template <typename... Args>
   iterator insert_many(const_iterator pos, Args&&... args);
 
+  template <typename... Args>
+  void insert_many_back(Args&&... args);
+
   void push_front(const Type& value);
   void push_back(const Type& value);
 
@@ -269,9 +272,21 @@ template <typename Type>
 template <typename... Args>
 typename s21::list<Type>::iterator s21::list<Type>::insert_many(
     const_iterator pos, Args&&... args) {
-  pointer_node prev_push = pos.link_node_->previous_node;
+  if (pos.link_list_ != this) {
+    throw std::invalid_argument("Incorrect list");
+  }
+  pointer_node prev_push = end_node_;
+  if (stored_) {
+    prev_push = pos.link_node_->previous_node;
+  }
   splice(pos, s21::list<Type>({args...}));
   return iterator(this, prev_push);
+}
+
+template <typename Type>
+template <typename... Args>
+void s21::list<Type>::insert_many_back(Args&&... args) {
+  return insert_many(end(), args...);
 }
 
 template <typename Type>
