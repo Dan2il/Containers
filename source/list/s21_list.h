@@ -91,6 +91,9 @@ class list {
   template <typename... Args>
   void insert_many_back(Args&&... args);
 
+  template <typename... Args>
+  void insert_many_front(Args&&... args);
+
   void push_front(const Type& value);
   void push_back(const Type& value);
 
@@ -290,20 +293,19 @@ void s21::list<Type>::insert_many_back(Args&&... args) {
 }
 
 template <typename Type>
+template <typename... Args>
+void s21::list<Type>::insert_many_front(Args&&... args) {
+  return insert_many(begin(), args...);
+}
+
+template <typename Type>
 void s21::list<Type>::push_back(const Type& value) {
-  pointer_node push = CreateNode(value);
-  !stored_
-      ? LinkPointerNodeRange(end_node_, end_node_, push, push)
-      : LinkPointerNodeRange(end_node_->previous_node, end_node_, push, push);
-  ++stored_;
+  insert(end(), value);
 }
 
 template <typename Type>
 void s21::list<Type>::push_front(const Type& value) {
-  pointer_node push = CreateNode(value);
-  !stored_ ? LinkPointerNodeRange(end_node_, end_node_, push, push)
-           : LinkPointerNodeRange(push, push, end_node_->next_node, end_node_);
-  ++stored_;
+  insert(begin(), value);
 }
 
 template <typename Type>
