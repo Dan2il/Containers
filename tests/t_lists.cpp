@@ -1537,3 +1537,13 @@ TEST(test_list, sort) {
     }
   }
 }
+
+TEST(test_list, insert_many) {
+  s21::list<int> list1 = {1, 2, 3, 4, 5, 6, 7, 8};
+  list1.insert_many(list1.begin(), 90, 80, 70, 60, 50, 40, 30, 20, 10);
+
+  EXPECT_EQ(17, list1.size());
+  EXPECT_EQ(s21::list<int>(
+                {90, 80, 70, 60, 50, 40, 30, 20, 10, 1, 2, 3, 4, 5, 6, 7, 8}),
+            list1);
+}
